@@ -41,6 +41,7 @@ export default {
   margin: 0;
   width: 100%;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .button, .button:visited
@@ -76,17 +77,17 @@ export default {
   height: 800px;
 }
 .right {
-  height:500px;
-  border:1px sold black;
+  height:800px;
+  border:1px solid black;
 }
 .left_list>li>a {
   font-size: 16px;
   color:white;
 }
-  h3 {
+  .title>h3 {
     padding: 5px;
     color:white;
-    font-weight: blod;
+    font-weight: bold;
     text-align: center;
   }
 
