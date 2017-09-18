@@ -1,6 +1,26 @@
 <template>
   <div>
-    <nuxt/>
+
+    <section class = "row">
+
+      <section class = "left col-md-3">
+        <section class = "title">
+          <h3>shadowBlog</h3>
+          <ul class = "left_list">
+            <li><a href="#">用户信息</a></li>
+            <li><a href="#">发布文章</a></li>
+            <li><a href="#">文章管理</a></li>
+            <li><a href="#">分类管理</a></li>
+            <li><a href="#">站点管理</a></li>
+          </ul>
+        </section>
+      </section>
+      <section class = "right col-md-9" >
+        <nuxt/>
+      </section>
+
+    </section>
+
     <my-footer/>
   </div>
 </template>
@@ -20,8 +40,7 @@ export default {
 {
   margin: 0;
   width: 100%;
-  padding: 100px 0;
-  text-align: center;
+  text-align: left;
 }
 
 .button, .button:visited
@@ -48,5 +67,18 @@ export default {
   font-weight: 300;
   font-size: 2.5em;
   margin: 0;
+}
+a:hover {
+  text-dectoration: none;
+}
+.left {
+  background: grey;
+}
+.right {
+  height:500px;
+  border:1px sold black;
+}
+.left_list>li>a {
+  color:white;
 }
 </style>

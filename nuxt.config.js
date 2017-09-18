@@ -16,12 +16,12 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', 'bootstrap/dist/css/bootstrap.css'],
   /*
   ** Add axios globally
   */
   build: {
-    vendor: ['axios'],
+    vendor: ['axios' ,'bootstrap'],
     /*
     ** Run ESLINT on save
     */
@@ -35,5 +35,6 @@ module.exports = {
         })
       }
     }
-  }
+  },
+  plugins: ['~plugins/bootstrap.js']
 }
