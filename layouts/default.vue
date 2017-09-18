@@ -83,7 +83,7 @@ export default {
   font-size: 16px;
   color:white;
 }
-  h3 {
+  .title>h3 {
     padding: 5px;
     color:white;
     font-weight: blod;
