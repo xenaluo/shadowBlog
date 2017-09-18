@@ -1,9 +1,9 @@
 <template>
   <div>
 
-    <section class = "row">
+    <section class = "row body">
 
-      <section class = "left col-md-3">
+      <section class = "left col-md-2">
         <section class = "title">
           <h3>shadowBlog</h3>
           <ul class = "left_list">
@@ -15,7 +15,7 @@
           </ul>
         </section>
       </section>
-      <section class = "right col-md-9" >
+      <section class = "right col-md-10" >
         <nuxt/>
       </section>
 
@@ -68,17 +68,26 @@ export default {
   font-size: 2.5em;
   margin: 0;
 }
-a:hover {
+ .left_list >a:hover {
   text-dectoration: none;
 }
 .left {
-  background: grey;
+  background: black;
+  height: 800px;
 }
 .right {
   height:500px;
   border:1px sold black;
 }
 .left_list>li>a {
+  font-size: 16px;
   color:white;
 }
+  h3 {
+    padding: 5px;
+    color:white;
+    font-weight: blod;
+    text-align: center;
+  }
+
 </style>
