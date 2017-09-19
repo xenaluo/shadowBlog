@@ -7,7 +7,13 @@ html, body
   height: 100vh;
   margin: 0;
 }
-
+input, button, select{
+  outline: none !important;
+}
+input:focus, button:focus, select:focus{
+  border-color: transparent !important;
+  box-shadow: 0 0 8px #9f9f9f !important;
+}
 footer
 {
   padding: 20px;
