@@ -21,7 +21,7 @@ module.exports = {
   ** Add axios globally
   */
   build: {
-    vendor: ['axios', 'bootstrap'],
+    vendor: ['axios', 'bootstrap', 'vue-quill-editor'],
     /*
     ** Run ESLINT on save
     */
@@ -36,5 +36,6 @@ module.exports = {
       }
     }
   },
-  plugins: ['~plugins/bootstrap.js']
+  plugins: ['~/plugins/bootstrap.js', { src: '~/plugins/edit-quill.js', ssr: false }]
+
 }

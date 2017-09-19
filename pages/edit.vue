@@ -1,73 +1,91 @@
-<!--<template>-->
-  <!--<div class="edit">-->
-    <!--<form action="">-->
-      <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-        <!--&lt;!&ndash;<label for="exampleInputEmail1">Email address</label>&ndash;&gt;-->
-        <!--&lt;!&ndash;<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">&ndash;&gt;-->
-      <!--&lt;!&ndash;</div>&ndash;&gt;-->
-      <!--&lt;!&ndash;<markdown-editor></markdown-editor>&ndash;&gt;-->
-      <!--<editor></editor>-->
-    <!--</form>-->
-  <!--</div>-->
-<!--</template>-->
-
-<!--<script>-->
-  <!--import markdownEditor from '../components/edit/MarkdownEditor.vue'-->
-  <!--import editor from '../components/edit/editor.vue'-->
-<!--//  import 'highlightjs/styles/github.css'-->
-<!--//  import hljs from 'highlightjs'-->
-<!--//  const content = require('../README.md')-->
-  <!--export default {-->
-    <!--components: {-->
-      <!--markdownEditor,-->
-      <!--editor-->
-    <!--}-->
-  <!--}-->
-<!--</script>-->
-
-<!--<style lang="scss" scoped>-->
-  <!--.edit{-->
-
-  <!--}-->
-<!--</style>-->
-
 <template>
-  <div id="edit">
-    <!--<div class="themes" @click="selectTheme">-->
-      <!--<span data-theme="default" style="width:28px;height:28px"></span>-->
-      <!--<span data-theme="dark"></span>-->
-      <!--<span data-theme="green"></span>-->
-      <!--<span data-theme="gray"></span>-->
-      <!--<span data-theme="princess"></span>-->
-    <!--</div>-->
-    <!--<h4>theme = "<span class="theme-type">default</span>"</h4>-->
-    <VmMarkdown :theme="theme"
-                width="94%"
-                height="500px"
-                v-on:gethtml="showHtml"
-                class="markdown"
-                :defaultText="intro">
-    </VmMarkdown>
+  <div class="edit-article">
+    <!--<button class="show-editor" @click="showEditor"></button>-->
+    <button type="button" class="btn btn-default btn-xs show-editor" @click="showEditor">{{changeEditor}}</button>
+    <form action="">
+      <div class="form-group">
+        <input type="text" class="form-control" id="titleInput" placeholder="Title">
+      </div>
+      <div class="form-group">
+        <!--<label for="exampleInputName2">Name</label>-->
+        <input type="text" class="form-control" id="authorInput" placeholder="Author">
+      </div>
+      <div id="edit">
+        <VmMarkdown v-if="!editor"
+                    :theme="theme"
+                    width="100%"
+                    height="500px"
+                    v-on:gethtml="showHtml"
+                    class="markdown"
+                    :defaultText="intro">
+        </VmMarkdown>
+        <EditQuill v-else></EditQuill>
+        <!--<ss></ss>-->
+      </div>
+      <div class="row form-inline">
+        <div class="col-md-6">
+          <div class="col-md-6" style="padding-left: 0">
+            <input type="text" class="form-control input-sm" placeholder="多个标签以英文逗号分隔" style="margin-right: 10px; width: 100%">
+          </div>
+          <div class="form-group">
+            <label for="selectCar">文章分类</label>
+            <select class="form-control input-sm" id="selectCar" style="margin-left: 10px">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 form-inline" style="text-align: right">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="inlineCheckbox1" value="option1"> 置顶
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" id="inlineCheckbox2" value="option1"> 允许评论
+          </label>
+          <input class="btn btn-default" type="button" value="存草稿" style="margin-left: 10px">
+          <input class="btn btn-default" type="button" value="发布" style="margin-left: 10px; background-color: #dedede">
+        </div>
+      </div>
+      <div class="row" style="padding-left: 15px">
+        选择已有标签:
+        <a href="" class="article-tag">aa</a>
+        <a href="" class="article-tag">bb</a>
+        <a href="" class="article-tag">cc</a>
+        <a href="" class="article-tag">dd</a>
+      </div>
+    </form>
+
   </div>
+
 </template>
 
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
-  import intro from '../components/text/intro.js'
+  import EditQuill from '../components/edit/edit-quill.vue'
+//  import ss from '~/plugins/editor'
   export default {
     name: 'app',
     components: {
-      VmMarkdown
+      VmMarkdown,
+      EditQuill
     },
     data: function () {
       return {
         theme: 'default',
-        intro: intro
+        intro: '',
+        editor: 0
       }
     },
     methods: {
       showHtml (html) {
         // get html string here
+        //  alert(html)
+      },
+      showEditor () {
+        this.editor = !this.editor
       },
       selectTheme (evt) {
         if (evt.target.tagName === 'SPAN') {
@@ -83,12 +101,20 @@
           evt.target.style.height = '28px'
         }
       }
+    },
+    computed: {
+      changeEditor () {
+        if (this.editor) {
+          return 'M'
+        } else {
+          return 'E'
+        }
+      }
     }
   }
 </script>
 
 <style lang="scss">
-  // @import url('./assets/iconfont/iconfont.css');
   #edit {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
      -webkit-font-smoothing: antialiased;
@@ -98,71 +124,25 @@
     flex-direction: column;
     align-items: center;
   }
-  .markdown{
-    margin-top: 16px;
+  .article-tag{
+    text-decoration: underline;
+    margin-left: 6px;
+    color: #1d3e81 !important;
   }
-  .author{
-    margin: 30px 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    i{
-      color: #232323;
-      font-size: 28px;
-    }
+  .right{
+    position: relative;
   }
-  .logo{
-    svg{
-      transform: scale(0.7);
-    }
+  .edit-article{
+    /*position: relative;*/
+    width: 94%;
+    margin: 50px auto;
   }
-  h2.logo-name{
-    color: #35495e;
-  }
-  .themes{
-    display: flex;
-    align-items: center;
-    span{
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      background-color: red;
-      border-radius: 50%;
-      margin: 0 6px;
-      border: 2px solid #e0e0e0;
-      cursor: pointer;
-      color: white;
-      &:nth-child(1){
-        background-color: #35495e;
-      }
-      &:nth-child(2){
-        background-color: #232323;
-      }
-      &:nth-child(3){
-        background-color: #41b883;
-      }
-      &:nth-child(4){
-        background-color: #fafbfc;
-      }
-      &:nth-child(5){
-        background-color: #27292c;
-      }
-      &:nth-child(5){
-        background-color: #f05959;
-      }
-    }
-  }
-  h2 {
-    font-weight: bold;
-    margin: 0px 0;
-  }
-  p.desc{
-    color: #858585;
-    margin: 20px 0 30px 0;
-  }
-  a {
-    color: #42b983;
-    text-decoration: none;
+  .show-editor{
+    position: absolute;
+    width: 30px;
+    text-align: center;
+    top: 200px;
+    left: 0;
   }
 </style>
 

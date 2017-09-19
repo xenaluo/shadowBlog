@@ -9,7 +9,7 @@
     </VmMarkdownMenu>
     <div class="content">
       <div class="vm-markdown-edit" :style="{backgroundColor: themeValue.bgLeft}">
-        <textarea class="vm-markdown-content" v-model="markdString"></textarea>
+        <textarea class="vm-markdown-content" v-model="markdString" placeholder="文章内容"></textarea>
       </div>
       <div class="vm-markdown-html" v-html="htmlString" :style="{backgroundColor: themeValue.bgRight}">
       </div>
@@ -191,6 +191,7 @@ export default {
     min-width: 700px;
     min-height: 300px;
     overflow: hidden;
+    margin-bottom: 15px;
     .content{
       display: flex;
       position: relative;
