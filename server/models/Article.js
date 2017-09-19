@@ -3,7 +3,7 @@ let mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ArticleSchema = new Schema({
-  id: String,
+  aid: String,
   title: String,
   state: Number,
   author: String,
@@ -14,10 +14,8 @@ const ArticleSchema = new Schema({
   content: String,
   label: [],
   is_top: Boolean,
-  can_comment: Boolean
-
-},{collection: 'comments'});
-
+  can_comment: Boolean,
+  is_draft: Boolean
+}, {collection: 'comments'})
 const Article = mongoose.model('Article', ArticleSchema)
-
 module.exports = Article

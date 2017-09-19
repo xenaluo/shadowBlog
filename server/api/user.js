@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../db/db.js')
 const confirmToken = require('../middlewares/confirmToken')
 const rand = require('csprng')
 const sha1 = require('sha1')
+let User = require('../models/User')
 
 // 修改账户
 router.post('/api/user', confirmToken, (req, res) => {
@@ -13,7 +13,7 @@ router.post('/api/user', confirmToken, (req, res) => {
     name: req.body.name,
     password: sha1(req.body.password + salt)
   }
-  db.User.update({_id: req.body.id}, user, (err) => {
+  User.update({_id: req.body.id}, user, (err) => {
     if (err) {
       console.log(err)
     } else {
@@ -21,5 +21,4 @@ router.post('/api/user', confirmToken, (req, res) => {
     }
   })
 })
-
 module.exports = router

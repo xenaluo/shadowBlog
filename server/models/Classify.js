@@ -3,8 +3,7 @@ let mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ClassifySchema = new Schema({
-    name: String,
-  }
+  name: String
 }, {collection: 'classify'})
-const User = mongoose.model('Classify', ClassifySchema)
+const Classify = mongoose.model('Classify', ClassifySchema)
 module.exports = Classify

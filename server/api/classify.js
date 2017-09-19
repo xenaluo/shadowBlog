@@ -1,28 +1,33 @@
 const express = require('express')
 const router = express.Router()
-const db = require('../db/db.js')
-const confirmToken = require('../middlewares/confirmToken')
-const rand = require('csprng')
-const sha1 = require('sha1')
+let Classify = require('../models/Classify')
+/* eslint-disable */
+// 获取分类
+router.get('/api/classify', (req, res) => {
+  res.send('111')
+  // Classify.find().exec().then((articles) => {
+  //   res.send(articles)
+  // })
+})
 
-// 修改账户
-router.post('/api/user', confirmToken, (req, res) => {
-  const salt = rand(160, 36)
-  const user = {
-    salt: salt,
-    name: req.body.name,
-    password: sha1(req.body.password + salt)
-  }
-  db.User.update({_id: req.body.id}, user, (err) => {
+// 删除分类
+// 删除文章并删除文章下面的评论
+router.delete('/api/classify/:name', (req, res) => {
+  Classify.remove({id: req.params.id}, (err, data) => {
     if (err) {
       console.log(err)
     } else {
-      res.status(200).send('update successfully')
+      db.Comment.remove({name: req.params.name}, (err, data) => {
+        if (err) {
+          console.log(err)
+        } else {
+          res.status(200).send('succeed in deleting ---' + data)
+        }
+      })
     }
   })
+
 })
-router.get('/api/classify', (req, res) => {
-  console.log(req)
-  res.send('111')
-})
+
 module.exports = router
+
