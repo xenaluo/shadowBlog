@@ -3,7 +3,7 @@ const router = express.Router()
 let Classify = require('../models/Classify')
 /* eslint-disable */
 // 获取分类
-router.get('/api/classify', (req, res) => {
+router.get('/classify', (req, res) => {
   res.send('111')
   // Classify.find().exec().then((articles) => {
   //   res.send(articles)
@@ -12,7 +12,7 @@ router.get('/api/classify', (req, res) => {
 
 // 删除分类
 // 删除文章并删除文章下面的评论
-router.delete('/api/classify/:name', (req, res) => {
+router.delete('/classify/:name', (req, res) => {
   Classify.remove({id: req.params.id}, (err, data) => {
     if (err) {
       console.log(err)

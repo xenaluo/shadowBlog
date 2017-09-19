@@ -12,7 +12,7 @@ const creatToken = (id, name) => {
   }, secret.cert, { expiresIn: '7d' })
 }
 
-router.post('/api/login', (req, res) => {
+router.post('/login', (req, res) => {
   User.findOne({name: req.body.name}, (err, doc) => {
     if (err) {
       console.log(err)

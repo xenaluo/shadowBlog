@@ -1,4 +1,5 @@
 let mongoose = require('mongoose')
+const autoIncrement = require('mongoose-auto-increment');
 
 const Schema = mongoose.Schema
 
@@ -17,5 +18,12 @@ const ArticleSchema = new Schema({
   can_comment: Boolean,
   is_draft: Boolean
 }, {collection: 'comments'})
-const Article = mongoose.model('Article', ArticleSchema)
+
+ArticleSchema.plugin(autoIncrement.plugin, {
+  model: 'Article',
+  field: 'aid',
+  startAt: 1,
+  incrementBy: 1
+});
+var Article = mongoose.model('Article', ArticleSchema);
 module.exports = Article

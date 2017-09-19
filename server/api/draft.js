@@ -5,7 +5,7 @@ let Article = require('../models/Article')
 
 /* eslint-disable */
 // 保存草稿
-router.post('/api/draft', confirmToken, (req, res) => {
+router.post('/draft', confirmToken, (req, res) => {
   const article = {
     title: req.body.title,
     content: req.body.content,
@@ -18,7 +18,7 @@ router.post('/api/draft', confirmToken, (req, res) => {
 })
 
 // 更新草稿
-router.patch('/api/draft/:aid', confirmToken, (req, res) => {
+router.patch('/draft/:aid', confirmToken, (req, res) => {
   const aid = req.params.aid
   const article = {
     title: req.body.title,
@@ -37,7 +37,7 @@ router.patch('/api/draft/:aid', confirmToken, (req, res) => {
 })
 
 // 获取所有的草稿
-router.get('/api/drafts', (req, res) => {
+router.get('/drafts', (req, res) => {
   const page = req.query.payload.page
   const limit = req.query.payload.limit - 0 || 8
   const skip = limit * (page - 1 )

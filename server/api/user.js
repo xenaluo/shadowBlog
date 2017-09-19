@@ -6,7 +6,7 @@ const sha1 = require('sha1')
 let User = require('../models/User')
 
 // 修改账户
-router.post('/api/user', confirmToken, (req, res) => {
+router.post('/user', confirmToken, (req, res) => {
   const salt = rand(160, 36)
   const user = {
     salt: salt,
