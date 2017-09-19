@@ -1,31 +1,31 @@
 <template>
   <div class="edit-article">
-    <!--<button class="show-editor" @click="showEditor"></button>-->
-    <button type="button" class="btn btn-default btn-xs show-editor" @click="showEditor">{{changeEditor}}</button>
+    <span class="change-editor" @click="showEditor">{{changeEditor}}</span>
     <form action="">
       <div class="form-group">
-        <input type="text" class="form-control" id="titleInput" placeholder="Title">
+        <input type="text" class="form-control" id="titleInput" placeholder="Title" v-model="title">
       </div>
       <div class="form-group">
         <!--<label for="exampleInputName2">Name</label>-->
-        <input type="text" class="form-control" id="authorInput" placeholder="Author">
+        <input type="text" class="form-control" id="authorInput" placeholder="Author" v-model="author">
       </div>
       <div id="edit">
         <VmMarkdown v-if="!editor"
-                    :theme="theme"
                     width="100%"
                     height="500px"
                     v-on:gethtml="showHtml"
-                    class="markdown"
-                    :defaultText="intro">
+                    class="markdown">
         </VmMarkdown>
         <EditQuill v-else></EditQuill>
-        <!--<ss></ss>-->
       </div>
       <div class="row form-inline">
         <div class="col-md-6">
           <div class="col-md-6" style="padding-left: 0">
-            <input type="text" class="form-control input-sm" placeholder="多个标签以英文逗号分隔" style="margin-right: 10px; width: 100%">
+            <input type="text"
+                   class="form-control input-sm"
+                   placeholder="多个标签以英文逗号分隔"
+                   style="margin-right: 10px; width: 100%"
+                   v-model="tag">
           </div>
           <div class="form-group">
             <label for="selectCar">文章分类</label>
@@ -45,16 +45,16 @@
           <label class="checkbox-inline">
             <input type="checkbox" id="inlineCheckbox2" value="option1"> 允许评论
           </label>
-          <input class="btn btn-default" type="button" value="存草稿" style="margin-left: 10px">
-          <input class="btn btn-default" type="button" value="发布" style="margin-left: 10px; background-color: #dedede">
+          <input class="btn btn-default"
+                 type="button" value="存草稿"
+                 style="margin-left: 10px"
+                 @click="commitArticle">
+          <input class="btn btn-default"
+                 type="button"
+                 value="发布"
+                 style="margin-left: 10px; background-color: #dedede"
+                 @click="commitArticle">
         </div>
-      </div>
-      <div class="row" style="padding-left: 15px">
-        选择已有标签:
-        <a href="" class="article-tag">aa</a>
-        <a href="" class="article-tag">bb</a>
-        <a href="" class="article-tag">cc</a>
-        <a href="" class="article-tag">dd</a>
       </div>
     </form>
 
@@ -65,7 +65,7 @@
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
-//  import ss from '~/plugins/editor'
+  import axios from '~/plugins/axios'
   export default {
     name: 'app',
     components: {
@@ -74,15 +74,25 @@
     },
     data: function () {
       return {
-        theme: 'default',
-        intro: '',
-        editor: 0
+        editor: 0,
+        title: '',
+        author: '',
+        tag: '',
+        content: ''
       }
+    },
+    asyncData () {
+      return axios.get('/api/classify').then((res) => {
+        console.log(res)
+        return res
+      })
     },
     methods: {
       showHtml (html) {
         // get html string here
         //  alert(html)
+        console.log(html)
+        this.content = html
       },
       showEditor () {
         this.editor = !this.editor
@@ -100,6 +110,35 @@
           evt.target.style.width = '28px'
           evt.target.style.height = '28px'
         }
+      },
+      commitArticle () {
+        let sendData = {
+          title: this.title,
+          author: this.author,
+          state: 1,
+          current_name: '',
+          publish_time: this.currentTime,
+          classify: '',
+          content: this.content,
+          label: this.parseTag(),
+          is_top: true,
+          can_comment: true
+        }
+        console.log(sendData)
+      },
+      parseTag () {
+        let arr = this.tag.split(',')
+        return arr
+      },
+      currentTime () {
+        let currentDate = new Date()
+        let year = currentDate.getFullYear()
+        let month = currentDate.getMonth() + 1 < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)
+        let date = currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()
+        let hours = currentDate.getHours() < 10 ? '0' + currentDate.getHours() : currentDate.getHours()
+        let minutes = currentDate.getMinutes() < 10 ? '0' + currentDate.getMinutes() : currentDate.getMinutes()
+        let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
+        return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
       }
     },
     computed: {
@@ -115,6 +154,7 @@
 </script>
 
 <style lang="scss">
+
   #edit {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
      -webkit-font-smoothing: antialiased;
@@ -144,5 +184,38 @@
     top: 200px;
     left: 0;
   }
+  .change-editor{
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    width: 55px;
+    height: 30px;
+    line-height: 30px;
+    top: 200px;
+    left: -20px;
+    padding-left: 24px;
+    border: 1px solid #7f828b;
+    border-right: 0;
+    transition: all .3s;
+    &:hover{
+      left: -1px;
+      padding-left: 5px;
+    }
+    &:after{
+      position: absolute;
+      right: -10px;
+      top: 4px;
+      display: block;
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-left: 1px solid #7f828b;
+      border-bottom: 1px solid #7f828b;
+      transform: rotateZ(45deg);
+    }
+  }
+
+
+
 </style>
 

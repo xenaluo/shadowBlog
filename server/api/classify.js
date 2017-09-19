@@ -21,5 +21,8 @@ router.post('/api/user', confirmToken, (req, res) => {
     }
   })
 })
-
+router.get('/api/classify', (req, res) => {
+  console.log(req)
+  res.send('111')
+})
 module.exports = router

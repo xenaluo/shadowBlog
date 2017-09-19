@@ -4,8 +4,7 @@
                     :menuBorder="themeValue.menuBorder"
                     :menuColor="themeValue.menuColor"
                     :hoverColor="themeValue.hoverColor"
-                    @textChange="updateHtmlString"
-                  >
+                    @textChange="updateHtmlString">
     </VmMarkdownMenu>
     <div class="content">
       <div class="vm-markdown-edit" :style="{backgroundColor: themeValue.bgLeft}">
@@ -22,13 +21,12 @@
   /* eslint-disable */
 import VmMarkdownMenu from './vm-markdown-menu.vue'
 import marked from 'marked'
-import theme from './theme/theme.js'
 export default {
   name: 'VmMarkdown',
   components: {
     VmMarkdownMenu
   },
-  props: ['theme', 'width', 'height', 'defaultText'],
+  props: ['width', 'height'],
   data: function () {
     return {
       markdString: '',
@@ -37,12 +35,14 @@ export default {
   },
   computed: {
     themeValue: function () {
-//      if (theme.hasOwnProperty(this.theme)) {
-//        return theme[this.theme]
-//      }else{
-//        return theme.dark
-//      }
-      return theme.dark
+      return {
+        menuColor: '#aaa',
+        menuBorder: '1px solid #27292c',
+        hoverColor: '#09bb07',
+        bgMenu: '#27292c',
+        bgLeft: '#edeae8',
+        bgRight: '#f5f5f5'
+      }
     }
   },
   methods: {
@@ -176,7 +176,7 @@ export default {
     }
   },
   mounted () {
-    this.markdString = this.defaultText
+//    this.markdString = this.defaultText
     this.layoutControl()
   }
 }

@@ -7,15 +7,15 @@
         <section class = "title">
           <h3>shadowBlog</h3>
           <ul class = "left_list">
-            <li><a href="#">用户信息</a></li>
-            <li><a href="#">发布文章</a></li>
-            <li><a href="#">文章管理</a></li>
-            <li><a href="#">分类管理</a></li>
-            <li><a href="#">站点管理</a></li>
+            <li><nuxt-link to="/">用户信息</nuxt-link></li>
+            <li><nuxt-link to="/edit">发布文章</nuxt-link></li>
+            <li><nuxt-link to="">文章管理</nuxt-link></li>
+            <li><nuxt-link to="">分类管理</nuxt-link></li>
+            <li><nuxt-link to="">站点管理</nuxt-link></li>
           </ul>
         </section>
       </section>
-      <section class = "right col-md-10" >
+      <section class = "right col-md-10">
         <nuxt/>
       </section>
 
@@ -78,6 +78,7 @@ export default {
 }
 .right {
   height:800px;
+  overflow: hidden;
   border:1px solid black;
 }
 .left_list>li>a {
