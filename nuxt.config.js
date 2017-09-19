@@ -36,7 +36,6 @@ module.exports = {
       }
     }
   },
-  // plugins: ['~plugins/bootstrap.js', { src: '~plugins/editor.js', ssr: false }]
-  // plugins: ['~plugins/bootstrap.js', '~plugins/editor.js']
   plugins: ['~/plugins/bootstrap.js', { src: '~/plugins/edit-quill.js', ssr: false }]
+
 }
