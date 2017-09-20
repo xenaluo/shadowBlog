@@ -1,7 +1,13 @@
-const express = require('express')
-const router = express.Router()
+import { Router } from 'express'
+
+const router = Router()
 let Classify = require('../models/Classify')
 /* eslint-disable */
+const users = [
+  { name: 'Alesssssss' },
+  { name: 'Pooya' },
+  { name: 'Sébastien' }
+]
 // 获取分类
 // router.get('/classify', (req, res) => {
 //   res.json({name: '111'})
@@ -9,17 +15,10 @@ let Classify = require('../models/Classify')
 //   //   res.send(articles)
 //   // })
 // })
-router.get('/classify', (req, res) => {
-  res.send('111')
-  // Classify.find().exec().then((articles) => {
-  //   res.send(articles)
-  // })
-})
-
 
 // 删除分类
 // 删除文章并删除文章下面的评论
-router.delete('/api/classify/:name', (req, res) => {
+router.delete('/classify/:name', (req, res) => {
   Classify.remove({id: req.params.id}, (err, data) => {
     if (err) {
       console.log(err)
@@ -36,5 +35,5 @@ router.delete('/api/classify/:name', (req, res) => {
 
 })
 
-module.exports = router
+export default router
 

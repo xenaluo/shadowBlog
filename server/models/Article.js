@@ -1,5 +1,4 @@
 let mongoose = require('mongoose')
-
 const Schema = mongoose.Schema
 
 const ArticleSchema = new Schema({
@@ -17,5 +16,5 @@ const ArticleSchema = new Schema({
   can_comment: Boolean,
   is_draft: Boolean
 }, {collection: 'comments'})
-const Article = mongoose.model('Article', ArticleSchema)
+var Article = mongoose.model('Article', ArticleSchema)
 module.exports = Article

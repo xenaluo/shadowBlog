@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const mail = require('../email')
+const mail = require('./email')
 let Comment = require('../models/Comment')
 /* eslint-disable */
 const emailForm = (title, name, otherName, message, content, url) => {
@@ -17,7 +17,7 @@ const emailForm = (title, name, otherName, message, content, url) => {
 }
 
 // 发布评论并通知站长和评论者
-router.post('/api/comment', (req, res) => {
+router.post('/comment', (req, res) => {
   Comment.findOne({name: req.body.name, articleId: req.body.articleId}, (err, doc) => {
     if (doc && doc.address !== req.body.address) {
       res.status(403).end('用户名已存在')
@@ -58,7 +58,7 @@ router.post('/api/comment', (req, res) => {
 })
 
 // 获取某一篇文章的所有评论
-router.get('/api/comments', (req, res) => {
+router.get('/comments', (req, res) => {
   const articleId = req.query.payload.id
   if (req.query.payload.sort === 'date') {
     Comment.find({articleId: articleId}, 'name date content like imgName').sort({date: -1}).exec()
@@ -78,7 +78,7 @@ router.get('/api/comments', (req, res) => {
 })
 
 // 更新评论的点赞数
-router.patch('/api/comments/:id', (req, res) => {
+router.patch('/comments/:id', (req, res) => {
   const id = req.params.id
   if (req.body.option === 'add') {
     Comment.update({_id: id}, {$inc: {like: 1}}, (err, data) => {
@@ -98,4 +98,5 @@ router.patch('/api/comments/:id', (req, res) => {
     })
   }
 })
+module.exports = router 
 /* eslint-disable */

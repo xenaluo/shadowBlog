@@ -2,6 +2,7 @@
 // 创建MongoDB数据库
 // 导入mongoose模块
 let mongoose = require('mongoose')
+
 // 链接数据库
 mongoose.connect('mongodb://127.0.0.1:27017/shadowblog')
 

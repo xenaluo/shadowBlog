@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const secret = require('../../config').jwt
+const secret = require('../config').jwt
 const jwt = require('jsonwebtoken')
 const sha1 = require('sha1')
 let User = require('../models/User')
@@ -12,7 +12,7 @@ const creatToken = (id, name) => {
   }, secret.cert, { expiresIn: '7d' })
 }
 
-router.post('/api/login', (req, res) => {
+router.post('/login', (req, res) => {
   User.findOne({name: req.body.name}, (err, doc) => {
     if (err) {
       console.log(err)

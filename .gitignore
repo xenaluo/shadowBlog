@@ -19,5 +19,5 @@ build
 .eslintrc.js
 
 # yarn
-.yarn.lock
+yarn.lock
 

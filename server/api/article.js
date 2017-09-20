@@ -3,9 +3,10 @@ const router = express.Router()
 const db = require('../db/db.js')
 const confirmToken = require('../middlewares/confirmToken')
 let Article = require('../models/Article')
+
 /* eslint-disable */
 // 发布文章
-router.post('/api/article', confirmToken, (req, res) => {
+router.post('/article', confirmToken, (req, res) => {
   const article = {
     // comment_n: 0,
     // title: req.body.title,
@@ -32,7 +33,7 @@ router.post('/api/article', confirmToken, (req, res) => {
 })
 
 // 获取某篇文章
-router.get('/api/article/:id', (req, res) => {
+router.get('/article/:id', (req, res) => {
   Article.findOne({id: req.params.id}, (err, doc) => {
     if (err) {
       console.log(err)
@@ -43,7 +44,7 @@ router.get('/api/article/:id', (req, res) => {
 })
 
 // 删除文章并删除文章下面的评论
-router.delete('/api/article/:id', confirmToken, (req, res) => {
+router.delete('/article/:id', confirmToken, (req, res) => {
   Article.remove({id: req.params.id}, (err, data) => {
     if (err) {
       console.log(err)
@@ -61,7 +62,7 @@ router.delete('/api/article/:id', confirmToken, (req, res) => {
 })
 
 // 更新文章
-router.patch('/api/article/:id', confirmToken, (req, res) => {
+router.patch('/article/:id', confirmToken, (req, res) => {
   const id = req.params.id
   const article = {
     // title: req.body.title,
@@ -69,7 +70,6 @@ router.patch('/api/article/:id', confirmToken, (req, res) => {
     // date: Date(),
     // content: req.body.content,
     // isPublish: true
-    id: '1',
     title: req.body.title,
     state: req.body.state,
     author: req.body.author,
@@ -92,7 +92,7 @@ router.patch('/api/article/:id', confirmToken, (req, res) => {
 })
 
 // 获取很多文章
-router.get('/api/articles', (req, res) => {
+router.get('/articles', (req, res) => {
   const page = req.query.payload.page
   const value = req.query.payload.value
   const limit = req.query.payload.limit - 0 || 4
@@ -108,4 +108,6 @@ router.get('/api/articles', (req, res) => {
     })
   }
 })
+module.exports = router 
+
 /* eslint-disable */
