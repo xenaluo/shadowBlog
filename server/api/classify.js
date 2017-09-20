@@ -17,6 +17,9 @@ router.get('/classify', (req, res) => {
   //   res.send(articles)
   // })
 })
+router.post('/classaa', (req, res) => {
+  console.log(req.body)
+})
 
 // 删除分类
 // 删除文章并删除文章下面的评论

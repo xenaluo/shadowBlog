@@ -45,10 +45,10 @@
 </template>
 <script>
     import axios from '~/plugins/axios'
+    import Qs from 'qs'
     export default {
       async asyncData () {
         let { data } = await axios.get('/api/classify')
-        console.log(data)
         return { items: data }
       },
       data: function () {
@@ -72,6 +72,7 @@
           this.name = name
         },
         addClassName (name) {
+          axios.post('/api/classaa', Qs.stringify({'name': name}))
           console.log('name' + name)
         },
         deleteClass (name) {
