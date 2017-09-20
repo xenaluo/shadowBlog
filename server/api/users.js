@@ -13,6 +13,12 @@ const users = [
 router.get('/users', function (req, res, next) {
   res.json(users)
 })
+// router.get('/classify', (req, res) => {
+//   res.send('111')
+//   // Classify.find().exec().then((articles) => {
+//   //   res.send(articles)
+//   // })
+// })
 
 /* GET user by ID. */
 router.get('/users/:id', function (req, res, next) {

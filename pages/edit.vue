@@ -65,13 +65,14 @@
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
-//  import axios from '~/plugins/axios'
+  import axios from '~/plugins/axios'
   export default {
-//    async asyncData () {
-//      let { data } = await axios.get('/api/classify')
-//      return { users: data }
-//    },
-    name: 'app',
+    async asyncData () {
+      let { data } = await axios.get('/api/classify')
+      console.log('data', data)
+      return { data }
+    },
+    name: 'edit',
     components: {
       VmMarkdown,
       EditQuill
