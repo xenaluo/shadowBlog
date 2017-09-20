@@ -47,6 +47,13 @@
             </div>
 
         </div>
+        <div class="delete" v-if="isDelete">
+            <p>确认删除当前分类</p>
+            <div>
+                <span>确认</span>
+                <span>取消</span>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -66,7 +73,8 @@
           name: '',
           newName: '',
           items: [],
-          updateItem: {}
+          updateItem: {},
+          isDelete: false
         }
       },
       methods: {
