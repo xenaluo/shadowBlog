@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const mail = require('../email')
+const mail = require('./email')
 let Comment = require('../models/Comment')
 /* eslint-disable */
 const emailForm = (title, name, otherName, message, content, url) => {
@@ -98,4 +98,5 @@ router.patch('/comments/:id', (req, res) => {
     })
   }
 })
+module.exports = router 
 /* eslint-disable */

@@ -12,7 +12,7 @@
         </thead>
         <tbody>
             <tr v-for="item in items">
-                <td>{{ item.message }}</td>
+                <td>{{ item.name }}</td>
                 <td>
                     <button type="button" class="btn btn-primary btn-xs" @click="updateClass(item.message)">修改</button>&nbsp;&nbsp;
                     <button type="button" class="btn btn-danger btn-xs" @click="deleteClass(item.message)">删除</button>
@@ -46,6 +46,11 @@
 <script>
     import axios from '~/plugins/axios'
     export default {
+      async asyncData () {
+        let { data } = await axios.get('/api/classify')
+        console.log(data)
+        return { items: data }
+      },
       data: function () {
         return {
           isShow1: true,
@@ -55,11 +60,6 @@
           newName: '',
           items: []
         }
-      },
-      created () {
-        axios.post('http://localhost:3000/home/shoplist').then((res) => {
-          this.items = res.data
-        })
       },
       methods: {
         showAddclass () {

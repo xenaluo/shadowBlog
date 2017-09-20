@@ -1,5 +1,5 @@
-const jwt =require('jsonwebtoken')
-const secret = require('../../config').jwt
+const jwt = require('jsonwebtoken')
+const secret = require('../config').jwt
 
 // 检查token是否正确
 const confirmToken = (req, res, next) => {

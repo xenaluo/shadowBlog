@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const secret = require('../../config').jwt
+const secret = require('../config').jwt
 const jwt = require('jsonwebtoken')
 const sha1 = require('sha1')
 let User = require('../models/User')

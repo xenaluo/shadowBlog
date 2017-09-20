@@ -2,10 +2,10 @@
 // 创建MongoDB数据库
 // 导入mongoose模块
 let mongoose = require('mongoose')
-const autoIncrement = require('mongoose-auto-increment');
+
 // 链接数据库
-let connection =  mongoose.connect('mongodb://127.0.0.1:27017/shadowblog')
-autoIncrement.initialize(connection);
+mongoose.connect('mongodb://127.0.0.1:27017/shadowblog')
+
 // 是否连接成功 连接的事件
 mongoose.connection.on('connected', function () {
   console.log('connect success')

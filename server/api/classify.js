@@ -1,10 +1,16 @@
-const express = require('express')
-const router = express.Router()
+import { Router } from 'express'
+
+const router = Router()
 let Classify = require('../models/Classify')
 /* eslint-disable */
+const users = [
+  { name: 'Alesssssss' },
+  { name: 'Pooya' },
+  { name: 'Sébastien' }
+]
 // 获取分类
 router.get('/classify', (req, res) => {
-  res.send('111')
+  res.json(users)
   // Classify.find().exec().then((articles) => {
   //   res.send(articles)
   // })
@@ -29,5 +35,5 @@ router.delete('/classify/:name', (req, res) => {
 
 })
 
-module.exports = router
+export default router
 

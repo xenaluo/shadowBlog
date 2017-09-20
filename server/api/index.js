@@ -4,7 +4,7 @@ import users from './users'
 import classify from './classify'
 import article from './article'
 import draft from './draft'
-import  login from './login'
+import login from './login'
 import user from './user'
 import comment from './comment'
 

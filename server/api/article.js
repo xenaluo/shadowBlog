@@ -108,4 +108,6 @@ router.get('/articles', (req, res) => {
     })
   }
 })
+module.exports = router 
+
 /* eslint-disable */
