@@ -1,19 +1,33 @@
+// const express = require('express')
+// const router = express.Router()
 import { Router } from 'express'
-
-const router = Router()
+const  router = Router()
 let Classify = require('../models/Classify')
+var bodyParser = require('body-parser')
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 /* eslint-disable */
+// 获取分类
 const users = [
-  { name: 'Alesssssss' },
-  { name: 'Pooya' },
+  { name: 'Al' },
+  { name: 'Po' },
   { name: 'Sébastien' }
 ]
-// 获取分类
-router.get('/classify', (req, res) => {
+router.get('/classify', (req, res ,next) => {
   res.json(users)
   // Classify.find().exec().then((articles) => {
   //   res.send(articles)
   // })
+})
+//添加分类
+
+router.post('/classify1', urlencodedParser, (req, res) => {
+  // const classify = {
+  //   name: name
+  // }
+  // new Classify(classify).save()
+  // res.status(200).send('classify successed')
+  console.log(req.body.name)
+  console.log('555')
 })
 
 // 删除分类
@@ -35,5 +49,5 @@ router.delete('/classify/:name', (req, res) => {
 
 })
 
+// module.exports = router
 export default router
-
