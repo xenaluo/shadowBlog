@@ -111,6 +111,7 @@
           if (box === 2) {
             this.isShow2 = false
           }
+          this.name = ''
         },
         deleteClass (item) {
           axios.post(`api/classify/delete/${item._id}`).then(response => {
