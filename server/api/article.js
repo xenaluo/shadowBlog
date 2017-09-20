@@ -4,7 +4,6 @@ const db = require('../db/db.js')
 const confirmToken = require('../middlewares/confirmToken')
 let Article = require('../models/Article')
 
-/* eslint-disable */
 // 发布文章
 router.post('/article', confirmToken, (req, res) => {
   const article = {
@@ -109,5 +108,3 @@ router.get('/articles', (req, res) => {
   }
 })
 module.exports = router 
-
-/* eslint-disable */

@@ -3,7 +3,6 @@ const router = express.Router()
 const confirmToken = require('../middlewares/confirmToken')
 let Article = require('../models/Article')
 
-/* eslint-disable */
 // 保存草稿
 router.post('/draft', confirmToken, (req, res) => {
   const article = {
@@ -49,4 +48,3 @@ router.get('/drafts', (req, res) => {
 })
 
 module.exports = router
-/* eslint-disable */
