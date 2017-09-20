@@ -40,20 +40,20 @@
         </div>
         <div class="col-md-6 form-inline" style="text-align: right">
           <label class="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox1" value="option1"> 置顶
+            <input type="checkbox" id="inlineCheckbox1" value="option1" @click="handleTop" :checked="isTop"> 置顶
           </label>
           <label class="checkbox-inline">
-            <input type="checkbox" id="inlineCheckbox2" value="option1"> 允许评论
+            <input type="checkbox" id="inlineCheckbox2" value="option1" @click="handleComment" :checked="canComment"> 允许评论
           </label>
           <input class="btn btn-default"
                  type="button" value="存草稿"
                  style="margin-left: 10px"
-                 @click="commitArticle">
+                 @click="commitArticle(0)">
           <input class="btn btn-default"
                  type="button"
                  value="发布"
                  style="margin-left: 10px; background-color: #dedede"
-                 @click="commitArticle">
+                 @click="commitArticle(1)">
         </div>
       </div>
     </form>
@@ -65,13 +65,14 @@
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
-//  import axios from '~/plugins/axios'
+  import axios from '~/plugins/axios'
   export default {
-//    async asyncData () {
-//      let { data } = await axios.get('/api/classify')
-//      return { users: data }
-//    },
-    name: 'app',
+    async asyncData () {
+      let { data } = await axios.get('/api/classify')
+      console.log('data', data)
+      return { data }
+    },
+    name: 'edit',
     components: {
       VmMarkdown,
       EditQuill
@@ -82,7 +83,9 @@
         title: '',
         author: '',
         tag: '',
-        content: ''
+        content: '',
+        isTop: true,
+        canComment: false
       }
     },
     methods: {
@@ -109,24 +112,37 @@
           evt.target.style.height = '28px'
         }
       },
-      commitArticle () {
+      handleTop () {
+        this.isTop = !this.isTop
+      },
+      handleComment () {
+        this.canComment = !this.canComment
+      },
+      commitArticle (code) {
         let sendData = {
           title: this.title,
           author: this.author,
-          state: 1,
-          current_name: '',
+          state: code,
+          current_name: 'admin',
           publish_time: this.currentTime,
           classify: '',
           content: this.content,
           label: this.parseTag(),
-          is_top: true,
-          can_comment: true
+          is_top: this.isTop,
+          can_comment: this.canComment
         }
         console.log(sendData)
       },
       parseTag () {
-        let arr = this.tag.split(',')
-        return arr
+        let charStr = ''
+        this.tag.split('').map(char => {
+          if (char !== ' ') {
+            charStr = charStr + char
+          }
+        })
+        let tagArr = charStr.split(',')
+        console.log(tagArr)
+        return tagArr
       },
       currentTime () {
         let currentDate = new Date()
