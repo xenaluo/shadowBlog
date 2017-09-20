@@ -1,42 +1,22 @@
-<<<<<<< HEAD
-// const express = require('express')
-// const router = express.Router()
-=======
-/* eslint-disable */
-
->>>>>>> master
 import { Router } from 'express'
-const  router = Router()
+const router = Router()
 let Classify = require('../models/Classify')
-<<<<<<< HEAD
-var bodyParser = require('body-parser')
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+// let bodyParser = require('body-parser')
+// let urlencodedParser = bodyParser.urlencoded({ extended: false })
 /* eslint-disable */
 // 获取分类
-=======
 
->>>>>>> master
-const users = [
-  { name: 'Al' },
-  { name: 'Po' },
-  { name: 'Sébastien' }
-]
-<<<<<<< HEAD
-router.get('/classify', (req, res ,next) => {
-  res.json(users)
-=======
+
 // 获取分类
 router.get('/classify', (req, res) => {
   res.json({name: '111'})
->>>>>>> master
   // Classify.find().exec().then((articles) => {
   //   res.send(articles)
   // })
 })
-<<<<<<< HEAD
 //添加分类
 
-router.post('/classify1', urlencodedParser, (req, res) => {
+router.post('/classify1', (req, res) => {
   // const classify = {
   //   name: name
   // }
@@ -44,10 +24,6 @@ router.post('/classify1', urlencodedParser, (req, res) => {
   // res.status(200).send('classify successed')
   console.log(req.body.name)
   console.log('555')
-=======
-router.post('/classaa', (req, res) => {
-  console.log(req.body)
->>>>>>> master
 })
 
 // 删除分类
