@@ -1,8 +1,7 @@
 import { Router } from 'express'
 const router = Router()
 let Classify = require('../models/Classify')
-// let bodyParser = require('body-parser')
-// let urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 /* eslint-disable */
 // 获取分类
 
