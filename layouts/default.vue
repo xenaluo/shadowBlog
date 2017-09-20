@@ -77,6 +77,7 @@ export default {
   height: 800px;
 }
 .right {
+  position: relative;
   height:800px;
   overflow: hidden;
   border:1px solid black;

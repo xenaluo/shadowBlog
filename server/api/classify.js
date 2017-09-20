@@ -1,44 +1,79 @@
 import { Router } from 'express'
+import Classify from '../models/Classify'
+// let Classify = require('../models/Classify')
 const router = Router()
-let Classify = require('../models/Classify')
 
 /* eslint-disable */
 // 获取分类
 
-router.get('/classify', (req, res) => {
-  res.send('111')
-  // Classify.find().exec().then((articles) => {
-  //   res.send(articles)
-  // })
+router.get('/classify', async (req, res) => {
+  let find = await Classify.find()
+  res.send(find)
 })
 
-router.post('/classify1', (req, res) => {
-  // const classify = {
-  //   name: name
-  // }
-  // new Classify(classify).save()
-  // res.status(200).send('classify successed')
+router.post('/classify/:name', async (req, res) => {
+  let find = await Classify.findOne({name: req.params.name})
+  console.log(find)
+  if (!find) {
+    const classify = new Classify({
+      name: req.params.name
+    })
+    classify.save().then( (res) => {
+      console.log('插入成功', res)
+    })
+    res.send({
+      status: 1,
+      type: 'ADD_CLASSIFY_SUCCESS',
+      msg: 'successed'
+    })
+  } else {
+    console.log('已存在')
+    res.send({
+      status: 0,
+      type: 'CLASSIFY_NAME_EXIST',
+      msg: '该分类已存在'
+    })
+  }
+})
+
+router.post('/classify/update/:_id', async (req, res) => {
   console.log(req.body)
-  console.log('555')
+  console.log(req.params._id)
+  Classify.findOne({name: req.body.name})
+    .then(result => {
+      console.log('result', result)
+      if (result) {
+        res.send({
+          status: 0,
+          type: 'CLASSIFY_NAME_EXIST',
+          msg: '该分类已存在'
+        })
+      } else {
+        Classify.update({_id: req.params._id}, {name: req.body.name})
+          .then(updateresult => {
+            console.log('update', updateresult)
+            res.send({
+              status: 1,
+              type: 'CLASSIFY_UPDATE_SUCCESS',
+              msg: 'success'
+            })
+          })
+      }
+  })
 })
 
 // 删除分类
 // 删除文章并删除文章下面的评论
-router.delete('/classify/:name', (req, res) => {
-  Classify.remove({id: req.params.id}, (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      db.Comment.remove({name: req.params.name}, (err, data) => {
-        if (err) {
-          console.log(err)
-        } else {
-          res.status(200).send('succeed in deleting ---' + data)
-        }
+router.post('/classify/delete/:id', (req, res) => {
+  console.log(req.params.id)
+  Classify.remove({_id: req.params.id})
+    .then(result => {
+      res.send({
+        status: 1,
+        type: 'CLASSIFY_REMOVE_SUCCESS',
+        msg: 'success'
       })
-    }
-  })
-
+    })
 })
 
 // module.exports = router
