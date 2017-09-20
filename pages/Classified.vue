@@ -48,10 +48,11 @@
     import Qs from '~/plugins/qs'
 
     export default {
-      async asyncData () {
-        let { data } = await axios.get('/api/classify')
-        return { items: data }
-      },
+//      async asyncData () {
+//        let { data } = await axios.get('/api/clsaaify')
+//        console.log(data)
+//        return { items: data }
+//      },
       data: function () {
         return {
           isShow1: true,
@@ -74,7 +75,6 @@
         },
         addClassName (name) {
           axios.post('api/classify1', Qs.stringify({ name: name }))
-
           console.log('name' + name)
         },
         deleteClass (name) {

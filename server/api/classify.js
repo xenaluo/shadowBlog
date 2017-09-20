@@ -6,15 +6,12 @@ let Classify = require('../models/Classify')
 /* eslint-disable */
 // 获取分类
 
-
-// 获取分类
 router.get('/classify', (req, res) => {
-  res.json({name: '111'})
+  res.send('111')
   // Classify.find().exec().then((articles) => {
   //   res.send(articles)
   // })
 })
-//添加分类
 
 router.post('/classify1', (req, res) => {
   // const classify = {
@@ -22,7 +19,7 @@ router.post('/classify1', (req, res) => {
   // }
   // new Classify(classify).save()
   // res.status(200).send('classify successed')
-  console.log(req.body.name)
+  console.log(req.body)
   console.log('555')
 })
 
