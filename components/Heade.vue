@@ -82,20 +82,20 @@
 
 </template>
 <script>
-  import axios from '~/plugins/axios'
-
-  export default {
-    async asyncData () {
-      let {data} = await axios.get('api')
-      return {message: data.message, imgUrl: data.url}
+import axios from '~/plugins/axios'
+export default {
+    async asyncData() {
+        let { data } = await axios.get('api')
+        return { message: data.message }
+        return { imgUrl: data.url }
     },
-    data: function () {
-      return {
-        imgUrl: '',
-        message: ''
-      }
+    data: function() {
+        return {
+            imgUrl: '',
+            message: ''
+        }
     }
-  }
+}
 </script>
 <style>
     .header {
