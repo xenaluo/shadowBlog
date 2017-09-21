@@ -9,6 +9,9 @@ class Tools {
     let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
     return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
   }
+  showErrorBox (store, msg) {
+    store.dispatch('showErrMsg', msg)
+  }
 }
 
 export default new Tools()

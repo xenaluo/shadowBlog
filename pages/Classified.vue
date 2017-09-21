@@ -96,6 +96,7 @@
   import axios from '~/plugins/axios'
   import Qs from '~/plugins/qs'
   import {mapGetters} from 'vuex'
+  import Tools from '~/assets/js/tools'
 
   export default {
     async fetch ({store, params}) {
@@ -153,7 +154,7 @@
        */
       updateClass () {
         if (this.name === '') {
-          this.showErrorBox('分类名称不能为空')
+          Tools.showErrorBox(this.$store, '分类名称不能为空')
           return
         }
         let path = `/api/classify/${this.updateItem.name}`
@@ -161,7 +162,7 @@
         axios.patch(path, sendData).then(response => {
           console.log(response)
           if (!response.data.status) {
-            this.showErrorBox(response.data.msg)
+            Tools.showErrorBox(this.$store, response.data.msg)
           } else {
             this.isShow3 = false
             this.$store.dispatch('classify/updateClassify', {name: this.name, oldName: this.updateItem.name})
@@ -177,11 +178,11 @@
        */
       addClassName () {
         if (this.name === '') {
-          this.showErrorBox('分类名称不能为空')
+          Tools.showErrorBox(this.$store, '分类名称不能为空')
         } else {
           axios.post(`api/classify/${this.name}`).then(response => {
             if (!response.data.status) {
-              this.showErrorBox(response.data.msg)
+              Tools.showErrorBox(this.$store, response.data.msg)
             } else {
               this.isShow2 = false
               this.$store.dispatch('classify/addClassify', {name: this.name})
@@ -210,7 +211,7 @@
       deleteClass (item) {
         axios.delete(`api/classify/${item.name}`).then(response => {
           if (!response.data.status) {
-            this.showErrorBox(response.data.msg)
+            Tools.showErrorBox(this.$store, response.data.msg)
           } else {
             this.isDelete = false
             this.$store.dispatch('classify/deleteClassify', this.deleteItem)
@@ -222,13 +223,6 @@
        */
       cancelDelete () {
         this.isDelete = false
-      },
-      /**
-       * 显示错误信息
-       * @param msg 错误信息
-       */
-      showErrorBox (msg) {
-        this.$store.dispatch('showErrMsg', msg)
       }
     },
     computed: {

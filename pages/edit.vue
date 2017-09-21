@@ -131,13 +131,13 @@
           can_comment: this.canComment
         }
         if (!this.title) {
-          this.showErrorBox('文章标题不能为空')
+          Tools.showErrorBox(this.$store, '文章标题不能为空')
           return
         } else if (!this.author) {
-          this.showErrorBox('作者不能为空')
+          Tools.showErrorBox(this.$store, '作者不能为空')
           return
         } else if (!this.content) {
-          this.showErrorBox('文章内容不能为空')
+          Tools.showErrorBox(this.$store, '文章内容不能为空')
           return
         }
         axios.post('/api/article/add', Qs.stringify(sendData))
@@ -147,9 +147,6 @@
               this.$router.push('/classified')
             }
           })
-      },
-      showErrorBox (msg) {
-        this.$store.dispatch('showErrMsg', msg)
       }
     },
     computed: {
