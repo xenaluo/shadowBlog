@@ -30,11 +30,7 @@
           <div class="form-group">
             <label for="selectCar">文章分类</label>
             <select class="form-control input-sm" id="selectCar" style="margin-left: 10px">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+              <option v-for="item in getClassifyList">{{item.name}}</option>
             </select>
           </div>
         </div>
@@ -66,6 +62,7 @@
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
   import axios from '~/plugins/axios'
+  import { mapGetters } from 'vuex'
   export default {
     async asyncData () {
       let { data } = await axios.get('/api/classify')
@@ -156,6 +153,9 @@
       }
     },
     computed: {
+      ...mapGetters('classify', [
+        'getClassifyList'
+      ]),
       changeEditor () {
         if (this.editor) {
           return 'M'

@@ -2,7 +2,7 @@
     <div>
         <div class="classlist" v-show="true">
     <h2>分类管理</h2>
-    <button class="btn btn-default" @click="showAddclass" >添加分类</button>
+    <button class="btn btn-default" @click="showAddclass">添加分类</button>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -11,11 +11,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="item in items">
-                <td>{{ item.name }}</td>
-                <td>
+            <tr v-for="item in getClassifyList">
+                <td class="col-md-5">{{ item.name }}</td>
+                <td class="col-md-7">
                     <button type="button" class="btn btn-primary btn-xs" @click="showUpdateclass(item)">修改</button>&nbsp;&nbsp;
-                    <button type="button" class="btn btn-danger btn-xs" @click="deleteClass(item)">删除</button>
+                    <button type="button" class="btn btn-danger btn-xs" @click="showDeleteClass(item)">删除</button>
                 </td>
             </tr>
         </tbody>
@@ -26,9 +26,9 @@
                 <h2>增加分类</h2>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control"  placeholder="分类名称" v-model="newName">
+                        <input type="text" class="form-control"  placeholder="分类名称" v-model="name">
                     </div>
-                    <button type="button" class="btn btn-default" @click="addClassName(newName)">Submit</button>
+                    <button type="button" class="btn btn-default" @click="addClassName(name)">Submit</button>
                 </form>
                 <button type="button" class="close" aria-label="Close" @click="closeBox(2)"><span aria-hidden="true">&times;</span></button>
             </div>
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control"  placeholder="分类名称" v-model="name">
                     </div>
-                    <button type="button" class="btn btn-default" @click="updateClass">Submit</button>
+                    <button type="button" class="btn btn-default" @click="updateClass(updateItem)">Submit</button>
                 </form>
                 <button type="button" class="close" aria-label="Close" @click="closeBox(3)"><span aria-hidden="true">&times;</span></button>
             </div>
@@ -49,9 +49,9 @@
         </div>
         <div class="delete" v-if="isDelete">
             <p>确认删除当前分类</p>
-            <div>
-                <span>确认</span>
-                <span>取消</span>
+            <div class="btn-box">
+                <span class="xbtn btn-confirm" @click="deleteClass(deleteItem)">确认</span>
+                <span class="xbtn btn-cancel" @click="cancelDelete">取消</span>
             </div>
         </div>
     </div>
@@ -59,11 +59,16 @@
 <script>
     import axios from '~/plugins/axios'
     import Qs from '~/plugins/qs'
-
+    import { mapGetters } from 'vuex'
     export default {
-      async asyncData () {
+//      async asyncData () {
+//        let { data } = await axios.get('/api/classify')
+//        console.log('data', data)
+//        return { items: data }
+//      },
+      async fetch ({ store, params }) {
         let { data } = await axios.get('/api/classify')
-        return { items: data }
+        store.dispatch('classify/initClassifyList', data)
       },
       data: function () {
         return {
@@ -71,25 +76,33 @@
           isShow2: false,
           isShow3: false,
           name: '',
-          newName: '',
           items: [],
           updateItem: {},
+          deleteItem: {},
           isDelete: false
         }
       },
       methods: {
+        // 点击 [添加分类] 按钮
         showAddclass () {
           this.isShow2 = true
         },
+        // 点击 [修改] 按钮
         showUpdateclass (item) {
+          console.log(item)
           this.isShow3 = true
           this.updateItem = item
           this.name = item.name
         },
+        showDeleteClass (item) {
+          this.isDelete = true
+          this.deleteItem = item
+        },
+        // 点击 更新分类 [submit] 按钮
         updateClass (item) {
-          console.log(this.updateItem)
-          console.log(this.name)
-          let path = `/api/classify/update/${this.updateItem._id}`
+          console.log('item', item)
+          // console.log(this.name)
+          let path = `/api/classify/update/${this.updateItem.name}`
           let sendData = Qs.stringify({name: this.name})
           axios.post(path, sendData).then(response => {
             console.log(response)
@@ -97,17 +110,20 @@
               alert(response.data.msg)
             } else {
               this.isShow3 = false
+              this.$store.dispatch('classify/updateClassify', {name: this.name, oldName: this.updateItem.name})
               this.name = ''
             }
           })
         },
+        // 点击 添加分类 [submit] 按钮
         addClassName (name) {
+          console.log(this.name)
           axios.post(`api/classify/${name}`).then(response => {
-            console.log(response)
             if (!response.data.status) {
               alert(response.data.msg)
             } else {
               this.isShow2 = false
+              this.$store.dispatch('classify/addClassify', {name: this.name})
               this.name = ''
             }
           })
@@ -122,31 +138,25 @@
           this.name = ''
         },
         deleteClass (item) {
-          axios.post(`api/classify/delete/${item._id}`).then(response => {
-            console.log(response)
+          console.log(item)
+          axios.post(`api/classify/delete/${item.name}`).then(response => {
+            // console.log(response)
             if (!response.data.status) {
               alert(response.data.msg)
             } else {
-              if (response.data.status) {
-                axios.get('/api/classify').then(response => {
-                  this.items = response.data
-                })
-              }
+              this.isDelete = false
+              this.$store.dispatch('classify/deleteClassify', this.deleteItem)
             }
           })
+        },
+        cancelDelete () {
+          this.isDelete = false
         }
       },
-      watch: {
-        isShow2 () {
-          axios.get('/api/classify').then(response => {
-            this.items = response.data
-          })
-        },
-        isShow3 () {
-          axios.get('/api/classify').then(response => {
-            this.items = response.data
-          })
-        }
+      computed: {
+        ...mapGetters('classify', [
+          'getClassifyList'
+        ])
       }
     }
 </script>
@@ -178,6 +188,31 @@
             position: absolute;
             top: 5px;
             right: 10px;
+        }
+    }
+    .delete{
+        position: fixed;
+        top: 300px;
+        left: 40%;
+        padding-top: 30px;
+        width: 20%;
+        margin: 0 auto;
+        text-align: center;
+        background: rgba(208, 208, 208, 0.1);
+        box-shadow: 0 0 10px rgba(109, 109, 109, 0.3);
+        .btn-box{
+            display: flex;
+            margin-top: 20px;
+            line-height: 30px;
+            .xbtn{
+                cursor: pointer;
+                border-top: 1px solid #bababa;
+                display: block;
+                flex-grow: 1;
+                &:nth-child(1){
+                    border-right: 1px solid #bababa;
+                }
+            }
         }
     }
 

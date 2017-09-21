@@ -36,9 +36,9 @@ router.post('/classify/:name', async (req, res) => {
   }
 })
 
-router.post('/classify/update/:_id', async (req, res) => {
+router.post('/classify/update/:name', async (req, res) => {
   console.log(req.body)
-  console.log(req.params._id)
+  console.log(req.params)
   Classify.findOne({name: req.body.name})
     .then(result => {
       console.log('result', result)
@@ -49,7 +49,7 @@ router.post('/classify/update/:_id', async (req, res) => {
           msg: '该分类已存在'
         })
       } else {
-        Classify.update({_id: req.params._id}, {name: req.body.name})
+        Classify.update({name: req.params.name}, {name: req.body.name})
           .then(updateresult => {
             console.log('update', updateresult)
             res.send({
@@ -63,10 +63,9 @@ router.post('/classify/update/:_id', async (req, res) => {
 })
 
 // 删除分类
-// 删除文章并删除文章下面的评论
-router.post('/classify/delete/:id', (req, res) => {
-  console.log(req.params.id)
-  Classify.remove({_id: req.params.id})
+router.post('/classify/delete/:name', (req, res) => {
+  console.log(req.params.name)
+  Classify.remove({name: req.params.name})
     .then(result => {
       res.send({
         status: 1,
