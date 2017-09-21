@@ -15,4 +15,5 @@ const ArticleSchema = new Schema({
   is_top: Boolean,
   can_comment: Boolean
 }, {collection: 'article'})
+
 export default mongoose.model('Article', ArticleSchema)

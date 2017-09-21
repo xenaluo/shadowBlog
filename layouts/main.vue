@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <heade></heade>
-        <nuxt/>
-        <my-footer></my-footer>
-    </div>
+  <div>
+    <heade></heade>
+    <nuxt/>
+    <my-footer></my-footer>
+  </div>
 
 </template>
 <script>

@@ -56,13 +56,13 @@
     </form>
     <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
   </div>
-
 </template>
 
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
   import ErrMsgBox from '../components/err-msg-box.vue'
+  import Tools from '~/assets/js/tools'
   import axios from '~/plugins/axios'
   import Qs from '~/plugins/qs'
   import { mapGetters } from 'vuex'
@@ -93,8 +93,6 @@
     },
     methods: {
       showHtml (html) {
-        // get html string here
-        console.log(html)
         this.content = html
       },
       showEditor () {
@@ -126,7 +124,7 @@
           author: this.author,
           state: code,
           current_name: localStorage.getItem('name') || 'admin1',
-          publish_time: this.currentTime(),
+          publish_time: Tools.currentTime(),
           images: '',
           classify: this.selected,
           content: this.content,
@@ -158,16 +156,6 @@
         setTimeout(() => {
           this.errorShow = false
         }, 1000)
-      },
-      currentTime () {
-        let currentDate = new Date()
-        let year = currentDate.getFullYear()
-        let month = currentDate.getMonth() + 1 < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)
-        let date = currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()
-        let hours = currentDate.getHours() < 10 ? '0' + currentDate.getHours() : currentDate.getHours()
-        let minutes = currentDate.getMinutes() < 10 ? '0' + currentDate.getMinutes() : currentDate.getMinutes()
-        let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
-        return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
       }
     },
     computed: {

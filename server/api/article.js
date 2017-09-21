@@ -7,7 +7,7 @@ const router = express.Router()
 // 发布文章
 router.post('/article/add', Article.commitNewArticle)
 
-// todo: 待修改
+// todo: 待修改 --start
 // 获取某篇文章
 router.get('/article/:id', (req, res) => {
   Article.findOne({id: req.params.id}, (err, doc) => {
@@ -83,5 +83,6 @@ router.get('/articles', (req, res) => {
     })
   }
 })
+// todo: 待修改 --end
 // module.exports = router
 export default router

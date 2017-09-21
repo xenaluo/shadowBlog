@@ -5,13 +5,22 @@
       <form class="connect">
         <div class="form-group">
           <label>用户名</label>
-          <input type="email" class="form-control" placeholder="Username" v-model="username">
+          <input type="email"
+                 class="form-control"
+                 placeholder="Username"
+                 v-model="username">
         </div>
         <div class="form-group">
           <label>密码</label>
-          <input type="password" class="form-control" placeholder="Password" v-model="psd">
+          <input type="password"
+                 class="form-control"
+                 placeholder="Password"
+                 v-model="psd">
         </div>
-        <button type="button" class="btn btn-success" @click="login(username, psd)">登录</button>
+        <button type="button"
+                class="btn btn-success"
+                @click="login(username, psd)">
+          登录</button>
       </form>
     </div>
     <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
@@ -19,6 +28,7 @@
 </template>
 <script>
 import ErrMsgBox from '../components/err-msg-box.vue'
+import Tools from '~/assets/js/tools'
 import axios from '~/plugins/axios'
 import sha1 from 'sha1'
 import Qs from '~/plugins/qs'
@@ -36,19 +46,9 @@ export default {
     ErrMsgBox
   },
   methods: {
-    currentTime () {
-      let currentDate = new Date()
-      let year = currentDate.getFullYear()
-      let month = currentDate.getMonth() + 1 < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)
-      let date = currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()
-      let hours = currentDate.getHours() < 10 ? '0' + currentDate.getHours() : currentDate.getHours()
-      let minutes = currentDate.getMinutes() < 10 ? '0' + currentDate.getMinutes() : currentDate.getMinutes()
-      let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
-      return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
-    },
     login (name, psd) {
       let npsd = sha1(psd)
-      let time = this.currentTime()
+      let time = Tools.currentTime()
       console.log(time)
       let message = {
         name: name,

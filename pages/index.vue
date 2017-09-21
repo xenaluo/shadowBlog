@@ -5,14 +5,11 @@
 </template>
 
 <script>
-  import axios from '~/plugins/axios'
+  //  import axios from '~/plugins/axios'
 
   export default {
     layout: 'main',
     async asyncData () {
-      let { data } = await axios.get('/api/users')
-      console.log('data', data)
-      return { users: data }
     },
     head () {
       return {
