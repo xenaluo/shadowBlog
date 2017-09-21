@@ -14,9 +14,11 @@
                 <button type="button" class="btn btn-success" @click="login(username, psd)">登录</button>
             </form>
         </div>
+        <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
     </div>
 </template>
 <script>
+import ErrMsgBox from '../components/err-msg-box.vue'
 import axios from '~/plugins/axios'
 import sha1 from 'sha1'
 import Qs from '~/plugins/qs'
@@ -25,8 +27,13 @@ export default {
   data: function () {
     return {
       username: '',
-      psd: ''
+      psd: '',
+      errorMsg: '',
+      errorShow: false
     }
+  },
+  components: {
+    ErrMsgBox
   },
   methods: {
     currentTime () {
@@ -43,15 +50,31 @@ export default {
       let npsd = sha1(psd)
       let time = this.currentTime()
       console.log(time)
+      let message = {
+        name: name,
+        psd: npsd,
+        time: time
+      }
       // 发送账户信息
-      axios.post('api/user', Qs.stringify([{ name: name }, { psd: npsd }, { time: time }])).then(response => {
+      axios.post('api/user', Qs.stringify(message)).then(response => {
         if (response.data === 0) {
-          alert('密码错误')
-        } else {
+          this.showErrorBox('密码错误')
+        } else if (response.data === 1) {
           localStorage.setItem('name', name)
           console.log(localStorage.getItem('name'))
+          this.$router.push('/edit')
+          // alert('密码正确')
+        } else if (response.data === 2) {
+          this.showErrorBox('用户不存在')
         }
       })
+    },
+    showErrorBox (msg) {
+      this.errorShow = true
+      this.errorMsg = msg
+      setTimeout(() => {
+        this.errorShow = false
+      }, 1000)
     }
   }
 }
