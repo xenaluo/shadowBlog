@@ -1,21 +1,31 @@
 export const state = () => ({
-  classifyList: []
+  errMsgBox: {
+    isShow: false,
+    msg: 'err'
+  }
 })
 
 export const getters = {
-  getClassifyList (state) {
-    return state.classifyList
+  getErrMsg (state) {
+    return state.errMsgBox
   }
 }
 
 export const mutations = {
-  initClassifyList (state, list) {
-    state.classifyList = list
+  showErrMsg (state, msg) {
+    state.errMsgBox.isShow = true
+    state.errMsgBox.msg = msg
+  },
+  hideErrMsg (state, msg) {
+    state.errMsgBox.isShow = false
   }
 }
 
 export const actions = {
-  initClassifyList (context, list) {
-    context.commit('initClassifyList', list)
+  showErrMsg (context, msg) {
+    context.commit('showErrMsg', msg)
+    setTimeout(() => {
+      context.commit('hideErrMsg', msg)
+    }, 1000)
   }
 }

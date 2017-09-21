@@ -1,17 +1,23 @@
 <template>
-  <div class="err-msg-box">
-    <div class="message-box">{{msg}}</div>
+  <div class="err-msg-box" v-if="getErrMsg.isShow">
+    <div class="message-box">{{getErrMsg.msg}}</div>
   </div>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   export default {
     transition: 'bounce',
     data () {
       return {
       }
     },
-    props: ['msg']
+    props: ['msg'],
+    computed: {
+      ...mapGetters([
+        'getErrMsg'
+      ])
+    }
   }
 </script>
 
@@ -21,8 +27,8 @@
     top: 200px;
     left: 35%;
     width: 30%;
-    background: rgba(222, 68, 39, .5);
-    box-shadow: 0 0 10px #fff;
+    background: rgba(222, 68, 39, .7);
+    box-shadow: 0 0 3px #fff;
     color: #fff;
     font-size: 18px;
     text-align: center;

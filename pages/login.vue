@@ -23,7 +23,7 @@
           登录</button>
       </form>
     </div>
-    <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
+    <ErrMsgBox></ErrMsgBox>
     </div>
 </template>
 <script>
@@ -37,9 +37,7 @@ export default {
   data: function () {
     return {
       username: '',
-      psd: '',
-      errorMsg: '',
-      errorShow: false
+      psd: ''
     }
   },
   components: {
@@ -70,11 +68,7 @@ export default {
       })
     },
     showErrorBox (msg) {
-      this.errorShow = true
-      this.errorMsg = msg
-      setTimeout(() => {
-        this.errorShow = false
-      }, 1000)
+      this.$store.dispatch('showErrMsg', msg)
     }
   }
 }

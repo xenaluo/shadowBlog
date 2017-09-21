@@ -88,7 +88,7 @@
         </div>
       </div>
     </div>
-    <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
+    <ErrMsgBox></ErrMsgBox>
   </div>
 </template>
 <script>
@@ -111,9 +111,7 @@
         items: [],
         updateItem: {},
         deleteItem: {},
-        isDelete: false,
-        errorMsg: '',
-        errorShow: false
+        isDelete: false
       }
     },
     components: {
@@ -230,11 +228,7 @@
        * @param msg 错误信息
        */
       showErrorBox (msg) {
-        this.errorShow = true
-        this.errorMsg = msg
-        setTimeout(() => {
-          this.errorShow = false
-        }, 1000)
+        this.$store.dispatch('showErrMsg', msg)
       }
     },
     computed: {

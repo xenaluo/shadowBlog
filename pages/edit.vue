@@ -54,7 +54,7 @@
         </div>
       </div>
     </form>
-    <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
+    <ErrMsgBox></ErrMsgBox>
   </div>
 </template>
 
@@ -86,9 +86,7 @@
         content: '',
         selected: '默认分类',
         isTop: false,
-        canComment: true,
-        errorMsg: 'error',
-        errorShow: false
+        canComment: true
       }
     },
     methods: {
@@ -151,11 +149,7 @@
           })
       },
       showErrorBox (msg) {
-        this.errorShow = true
-        this.errorMsg = msg
-        setTimeout(() => {
-          this.errorShow = false
-        }, 1000)
+        this.$store.dispatch('showErrMsg', msg)
       }
     },
     computed: {
