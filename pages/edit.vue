@@ -94,7 +94,6 @@
     methods: {
       showHtml (html) {
         // get html string here
-        //  alert(html)
         console.log(html)
         this.content = html
       },
@@ -126,7 +125,7 @@
           title: this.title,
           author: this.author,
           state: code,
-          current_name: 'admin',
+          current_name: localStorage.getItem('name') || 'admin1',
           publish_time: this.currentTime(),
           images: '',
           classify: this.selected,
@@ -145,19 +144,13 @@
           this.showErrorBox('文章内容不能为空')
           return
         }
-        axios.post('/api/article/add', Qs.stringify(sendData)).then(response => {
-          console.log(response.data)
-          if (response.data.status) {
-            this.title = ''
-            this.author = ''
-            this.content = ''
-            this.tag = ''
-            this.isTop = false
-            this.canComment = true
-            this.selected = '默认分类'
-            this.$router.push('/Classified')
-          }
-        })
+        axios.post('/api/article/add', Qs.stringify(sendData))
+          .then(response => {
+            console.log(response.data)
+            if (response.data.status) {
+              this.$router.push('/classified')
+            }
+          })
       },
       showErrorBox (msg) {
         this.errorShow = true

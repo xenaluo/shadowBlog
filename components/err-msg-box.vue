@@ -21,7 +21,7 @@
     top: 200px;
     left: 35%;
     width: 30%;
-    background: #5f5f5f;
+    background: rgba(222, 68, 39, .5);
     box-shadow: 0 0 10px #fff;
     color: #fff;
     font-size: 18px;

@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="classlist" v-show="true">
+  <div>
+    <div class="classlist" v-show="true">
     <h2>分类管理</h2>
     <button class="btn btn-default" @click="showAddclass">添加分类</button>
     <table class="table table-hover">
@@ -21,7 +21,7 @@
         </tbody>
     </table>
         </div>
-        <div class="cover" v-show="isShow2">
+    <div class="cover" v-show="isShow2">
             <div class="add-box">
                 <h2>增加分类</h2>
                 <form>
@@ -34,7 +34,7 @@
             </div>
 
         </div>
-        <div class="updateClass cover" v-show="isShow3">
+    <div class="updateClass cover" v-show="isShow3">
             <div class="add-box">
                 <h2>修改分类名称</h2>
                 <form>
@@ -47,145 +47,148 @@
             </div>
 
         </div>
-        <div class="cover"  v-if="isDelete">
-            <div class="delete">
-                <p>确认删除当前分类</p>
-                <div class="btn-box">
-                    <span class="xbtn btn-confirm" @click="deleteClass(deleteItem)">确认</span>
-                    <span class="xbtn btn-cancel" @click="cancelDelete">取消</span>
-                </div>
-            </div>
+    <div class="cover"  v-if="isDelete">
+      <div class="delete">
+        <p>确认删除当前分类</p>
+        <div class="btn-box">
+          <span class="xbtn btn-confirm" @click="deleteClass(deleteItem)">确认</span>
+          <span class="xbtn btn-cancel" @click="cancelDelete">取消</span>
         </div>
-        <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
+      </div>
     </div>
+    <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
+  </div>
 </template>
 <script>
-    import ErrMsgBox from '../components/err-msg-box.vue'
-    import axios from '~/plugins/axios'
-    import Qs from '~/plugins/qs'
-    import { mapGetters } from 'vuex'
-    export default {
-//      async asyncData () {
-//        let { data } = await axios.get('/api/classify')
-//        console.log('data', data)
-//        return { items: data }
-//      },
-      async fetch ({ store, params }) {
-        let { data } = await axios.get('/api/classify')
-        store.dispatch('classify/initClassifyList', data)
+  import ErrMsgBox from '../components/err-msg-box.vue'
+  import axios from '~/plugins/axios'
+  import Qs from '~/plugins/qs'
+  import { mapGetters } from 'vuex'
+  export default {
+    async fetch ({ store, params }) {
+      let { data } = await axios.get('/api/classify')
+      store.dispatch('classify/initClassifyList', data)
+    },
+    data: function () {
+      return {
+        isShow1: true,
+        isShow2: false,
+        isShow3: false,
+        name: '',
+        items: [],
+        updateItem: {},
+        deleteItem: {},
+        isDelete: false,
+        errorMsg: '',
+        errorShow: false
+      }
+    },
+    components: {
+      ErrMsgBox
+    },
+    methods: {
+      // 点击 [添加分类] 按钮
+      showAddclass () {
+        this.isShow2 = true
       },
-      data: function () {
-        return {
-          isShow1: true,
-          isShow2: false,
-          isShow3: false,
-          name: '',
-          items: [],
-          updateItem: {},
-          deleteItem: {},
-          isDelete: false,
-          errorMsg: '',
-          errorShow: false
+      // 点击 [修改] 按钮
+      showUpdateclass (item) {
+        console.log(item)
+        this.isShow3 = true
+        this.updateItem = item
+        this.name = item.name
+      },
+      showDeleteClass (item) {
+        this.isDelete = true
+        this.deleteItem = item
+      },
+      // 点击 更新分类 [submit] 按钮
+      updateClass () {
+        if (this.name === '') {
+          this.showErrorBox('分类名称不能为空')
+          return
         }
-      },
-      components: {
-        ErrMsgBox
-      },
-      methods: {
-        // 点击 [添加分类] 按钮
-        showAddclass () {
-          this.isShow2 = true
-        },
-        // 点击 [修改] 按钮
-        showUpdateclass (item) {
-          console.log(item)
-          this.isShow3 = true
-          this.updateItem = item
-          this.name = item.name
-        },
-        showDeleteClass (item) {
-          this.isDelete = true
-          this.deleteItem = item
-        },
-        // 点击 更新分类 [submit] 按钮
-        updateClass () {
-          if (this.name === '') {
-            this.showErrorBox('分类名称不能为空')
-            return
+        let path = `/api/classify/${this.updateItem.name}`
+        let sendData = Qs.stringify({name: this.name})
+        axios.patch(path, sendData).then(response => {
+          console.log(response)
+          if (!response.data.status) {
+            this.showErrorBox(response.data.msg)
+          } else {
+            this.isShow3 = false
+            this.$store.dispatch('classify/updateClassify', {name: this.name, oldName: this.updateItem.name})
+            this.name = ''
           }
-          let path = `/api/classify/${this.updateItem.name}`
-          let sendData = Qs.stringify({name: this.name})
-          axios.patch(path, sendData).then(response => {
-            console.log(response)
+        })
+      },
+      // 点击 添加分类 [submit] 按钮
+      addClassName () {
+        if (this.name === '') {
+          this.showErrorBox('分类名称不能为空')
+        } else {
+          axios.post(`api/classify/${this.name}`).then(response => {
             if (!response.data.status) {
-              alert(response.data.msg)
+              this.showErrorBox(response.data.msg)
             } else {
-              this.isShow3 = false
-              this.$store.dispatch('classify/updateClassify', {name: this.name, oldName: this.updateItem.name})
+              this.isShow2 = false
+              this.$store.dispatch('classify/addClassify', {name: this.name})
               this.name = ''
             }
           })
-        },
-        // 点击 添加分类 [submit] 按钮
-        addClassName () {
-          console.log(this.name)
-          if (this.name === '') {
-            this.showErrorBox('分类名称不能为空')
-          } else {
-            axios.post(`api/classify/${this.name}`).then(response => {
-              if (!response.data.status) {
-                alert(response.data.msg)
-              } else {
-                this.isShow2 = false
-                this.$store.dispatch('classify/addClassify', {name: this.name})
-                this.name = ''
-              }
-            })
-          }
-        },
-        closeBox (box) {
-          if (box === 3) {
-            this.isShow3 = false
-          }
-          if (box === 2) {
-            this.isShow2 = false
-          }
-          this.name = ''
-        },
-        deleteClass (item) {
-          console.log(item)
-          axios.delete(`api/classify/${item.name}`).then(response => {
-            // console.log(response)
-            if (!response.data.status) {
-              alert(response.data.msg)
-            } else {
-              this.isDelete = false
-              this.$store.dispatch('classify/deleteClassify', this.deleteItem)
-            }
-          })
-        },
-        cancelDelete () {
-          this.isDelete = false
-        },
-        showErrorBox (msg) {
-          this.errorShow = true
-          this.errorMsg = msg
-          setTimeout(() => {
-            this.errorShow = false
-          }, 1000)
         }
       },
-      computed: {
-        ...mapGetters('classify', [
-          'getClassifyList'
-        ])
+      closeBox (box) {
+        if (box === 3) {
+          this.isShow3 = false
+        }
+        if (box === 2) {
+          this.isShow2 = false
+        }
+        this.name = ''
+      },
+      /**
+       * 点击确认删除分类
+       * @param 要删除的分类
+       */
+      deleteClass (item) {
+        axios.delete(`api/classify/${item.name}`).then(response => {
+          if (!response.data.status) {
+            this.showErrorBox(response.data.msg)
+          } else {
+            this.isDelete = false
+            this.$store.dispatch('classify/deleteClassify', this.deleteItem)
+          }
+        })
+      },
+      /**
+       * 点击取消
+       */
+      cancelDelete () {
+        this.isDelete = false
+      },
+      /**
+       * 显示错误信息
+       * @param 错误信息
+       */
+      showErrorBox (msg) {
+        this.errorShow = true
+        this.errorMsg = msg
+        setTimeout(() => {
+          this.errorShow = false
+        }, 1000)
       }
+    },
+    computed: {
+      ...mapGetters('classify', [
+        'getClassifyList'
+      ])
     }
+  }
 </script>
 <style lang="scss">
     .cover{
         /*width:300px;*/
-        position: absolute;
+        position: fixed;
         top: 0;
         bottom: 0;
         left: 0;

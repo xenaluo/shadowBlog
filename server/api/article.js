@@ -1,42 +1,13 @@
 import Article from '../methods/article-method'
-const express = require('express')
+import express from 'express'
+import db from '../db/db.js'
+import confirmToken from '../middlewares/confirmToken'
 const router = express.Router()
-const db = require('../db/db.js')
-const confirmToken = require('../middlewares/confirmToken')
-// let Article = require('../models/Article')
-
-// const Article = require('../methods/article-method')
 
 // 发布文章
-router.post('/article', confirmToken, (req, res) => {
-  console.log(req.body)
-  // const article = {
-  //   // comment_n: 0,
-  //   // title: req.body.title,
-  //   // content: req.body.content,
-  //   // date: Date(),
-  //   // tags: req.body.tags,
-  //   // isPublish: true
-  //   id: '1',
-  //   title: req.body.title,
-  //   state: req.body.state,
-  //   author: req.body.author,
-  //   current_name: req.body.current_name,
-  //   publish_time: req.body.publish_time,
-  //   images: [],
-  //   classify: req.body.classify,
-  //   content: req.body.content,
-  //   label: req.body.label,
-  //   is_top: req.body.is_top,
-  //   can_comment: req.body.can_comment,
-  //   is_draft: Boolean
-  // }
-  // new Article(article).save()
-  // res.status(200).send('succeed in saving new passage.')
-})
-
 router.post('/article/add', Article.commitNewArticle)
 
+// todo: 待修改
 // 获取某篇文章
 router.get('/article/:id', (req, res) => {
   Article.findOne({id: req.params.id}, (err, doc) => {

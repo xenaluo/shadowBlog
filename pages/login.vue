@@ -1,20 +1,20 @@
 <template>
-    <div class="loginbg">
-        <div class="conbg">
-            <img src="../assets/img/logo3.png">
-            <form class="connect">
-                <div class="form-group">
-                    <label>用户名</label>
-                    <input type="email" class="form-control" placeholder="Username" v-model="username">
-                </div>
-                <div class="form-group">
-                    <label>密码</label>
-                    <input type="password" class="form-control" placeholder="Password" v-model="psd">
-                </div>
-                <button type="button" class="btn btn-success" @click="login(username, psd)">登录</button>
-            </form>
+  <div class="loginbg">
+    <div class="conbg">
+      <img src="../assets/img/logo3.png">
+      <form class="connect">
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="email" class="form-control" placeholder="Username" v-model="username">
         </div>
-        <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" class="form-control" placeholder="Password" v-model="psd">
+        </div>
+        <button type="button" class="btn btn-success" @click="login(username, psd)">登录</button>
+      </form>
+    </div>
+    <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
     </div>
 </template>
 <script>
