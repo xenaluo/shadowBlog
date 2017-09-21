@@ -11,7 +11,7 @@ router.get('/classify', async (req, res) => {
   res.send(find)
 })
 
-router.post('/classify/add/:name', async (req, res) => {
+router.post('/classify/:name', async (req, res) => {
   let find = await Classify.findOne({name: req.params.name})
   console.log(find)
   if (!find) {
@@ -36,7 +36,7 @@ router.post('/classify/add/:name', async (req, res) => {
   }
 })
 
-router.post('/classify/update/:name', async (req, res) => {
+router.patch('/classify/:name', async (req, res) => {
   console.log(req.body)
   console.log(req.params)
   Classify.findOne({name: req.body.name})
@@ -63,7 +63,7 @@ router.post('/classify/update/:name', async (req, res) => {
 })
 
 // 删除分类
-router.post('/classify/delete/:name', (req, res) => {
+router.delete('/classify/:name', (req, res) => {
   console.log(req.params.name)
   Classify.remove({name: req.params.name})
     .then(result => {
