@@ -1,18 +1,18 @@
 <template>
     <div class="loginbg">
-		<div class="conbg">	
-			<img src="../assets/img/logo3.png">
-        <form class="connect">
-            <div class="form-group">
-                <label>用户名</label>
-                <input type="email" class="form-control" placeholder="Username" v-model="username">
-            </div>
-            <div class="form-group">
-                <label>密码</label>
-                <input type="password" class="form-control" placeholder="Password" v-model="psd">
-            </div>
-            <button type="button" class="btn btn-success" @click="login(username, psd)">登录</button>
-        </form>
+        <div class="conbg">
+            <img src="../assets/img/logo3.png">
+            <form class="connect">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="email" class="form-control" placeholder="Username" v-model="username">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="form-control" placeholder="Password" v-model="psd">
+                </div>
+                <button type="button" class="btn btn-success" @click="login(username, psd)">登录</button>
+            </form>
         </div>
     </div>
 </template>
@@ -29,44 +29,65 @@ export default {
     }
   },
   methods: {
+    currentTime () {
+      let currentDate = new Date()
+      let year = currentDate.getFullYear()
+      let month = currentDate.getMonth() + 1 < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)
+      let date = currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()
+      let hours = currentDate.getHours() < 10 ? '0' + currentDate.getHours() : currentDate.getHours()
+      let minutes = currentDate.getMinutes() < 10 ? '0' + currentDate.getMinutes() : currentDate.getMinutes()
+      let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
+      return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
+    },
     login (name, psd) {
       let npsd = sha1(psd)
+      let time = this.currentTime()
+      console.log(time)
       // 发送账户信息
-      axios.post('api/classify1', Qs.stringify([{name: name}, {psd: npsd}]))
+      axios.post('api/user', Qs.stringify([{ name: name }, { psd: npsd }, { time: time }])).then(response => {
+        if (response.data === 0) {
+          alert('密码错误')
+        } else {
+          localStorage.setItem('name', name)
+          console.log(localStorage.getItem('name'))
+        }
+      })
     }
   }
 }
 </script>
 <style>
-	*{
-		margin: 0;
-		padding: 0
-	}
-.loginbg{
-	position: absolute;
+* {
+    margin: 0;
+    padding: 0
+}
+
+.loginbg {
+    position: absolute;
     top: 0;
     bottom: 0;
     background: url(../assets/img/loginbg.jpg) no-repeat;
     width: 100%;
     height: 100%;
 }
-.connect{
+
+.connect {
     width: 300px;
     margin: 0 auto;
-
 }
-.conbg{
-	position: relative;
-	top: 100px;
-	width: 500px;
-	height: 400px;
-	background-color: rgba(255,255,255,0.4);
-	border-radius: 20px; 
-	margin: 0 auto;
-	padding: 10px 0 0 10px
 
+.conbg {
+    position: relative;
+    top: 100px;
+    width: 500px;
+    height: 400px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    margin: 0 auto;
+    padding: 10px 0 0 10px
 }
-img{
-	height: 100px
+
+img {
+    height: 100px
 }
 </style>
