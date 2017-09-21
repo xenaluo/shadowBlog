@@ -21,20 +21,20 @@
         </tbody>
     </table>
         </div>
-        <div class="addClass" v-show="isShow2">
+        <div class="cover" v-show="isShow2">
             <div class="add-box">
                 <h2>增加分类</h2>
                 <form>
                     <div class="form-group">
                         <input type="text" class="form-control"  placeholder="分类名称" v-model="name">
                     </div>
-                    <button type="button" class="btn btn-default" @click="addClassName(name)">Submit</button>
+                    <button type="button" class="btn btn-default" @click="addClassName">Submit</button>
                 </form>
                 <button type="button" class="close" aria-label="Close" @click="closeBox(2)"><span aria-hidden="true">&times;</span></button>
             </div>
 
         </div>
-        <div class="updateClass addClass" v-show="isShow3">
+        <div class="updateClass cover" v-show="isShow3">
             <div class="add-box">
                 <h2>修改分类名称</h2>
                 <form>
@@ -47,16 +47,20 @@
             </div>
 
         </div>
-        <div class="delete" v-if="isDelete">
-            <p>确认删除当前分类</p>
-            <div class="btn-box">
-                <span class="xbtn btn-confirm" @click="deleteClass(deleteItem)">确认</span>
-                <span class="xbtn btn-cancel" @click="cancelDelete">取消</span>
+        <div class="cover"  v-if="isDelete">
+            <div class="delete">
+                <p>确认删除当前分类</p>
+                <div class="btn-box">
+                    <span class="xbtn btn-confirm" @click="deleteClass(deleteItem)">确认</span>
+                    <span class="xbtn btn-cancel" @click="cancelDelete">取消</span>
+                </div>
             </div>
         </div>
+        <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
     </div>
 </template>
 <script>
+    import ErrMsgBox from '../components/err-msg-box.vue'
     import axios from '~/plugins/axios'
     import Qs from '~/plugins/qs'
     import { mapGetters } from 'vuex'
@@ -79,8 +83,13 @@
           items: [],
           updateItem: {},
           deleteItem: {},
-          isDelete: false
+          isDelete: false,
+          errorMsg: '',
+          errorShow: false
         }
+      },
+      components: {
+        ErrMsgBox
       },
       methods: {
         // 点击 [添加分类] 按钮
@@ -99,9 +108,11 @@
           this.deleteItem = item
         },
         // 点击 更新分类 [submit] 按钮
-        updateClass (item) {
-          console.log('item', item)
-          // console.log(this.name)
+        updateClass () {
+          if (this.name === '') {
+            this.showErrorBox('分类名称不能为空')
+            return
+          }
           let path = `/api/classify/update/${this.updateItem.name}`
           let sendData = Qs.stringify({name: this.name})
           axios.post(path, sendData).then(response => {
@@ -116,17 +127,21 @@
           })
         },
         // 点击 添加分类 [submit] 按钮
-        addClassName (name) {
+        addClassName () {
           console.log(this.name)
-          axios.post(`api/classify/${name}`).then(response => {
-            if (!response.data.status) {
-              alert(response.data.msg)
-            } else {
-              this.isShow2 = false
-              this.$store.dispatch('classify/addClassify', {name: this.name})
-              this.name = ''
-            }
-          })
+          if (this.name === '') {
+            this.showErrorBox('分类名称不能为空')
+          } else {
+            axios.post(`api/classify/add/${this.name}`).then(response => {
+              if (!response.data.status) {
+                alert(response.data.msg)
+              } else {
+                this.isShow2 = false
+                this.$store.dispatch('classify/addClassify', {name: this.name})
+                this.name = ''
+              }
+            })
+          }
         },
         closeBox (box) {
           if (box === 3) {
@@ -151,6 +166,13 @@
         },
         cancelDelete () {
           this.isDelete = false
+        },
+        showErrorBox (msg) {
+          this.errorShow = true
+          this.errorMsg = msg
+          setTimeout(() => {
+            this.errorShow = false
+          }, 1000)
         }
       },
       computed: {
@@ -161,7 +183,7 @@
     }
 </script>
 <style lang="scss">
-    .addClass{
+    .cover{
         /*width:300px;*/
         position: absolute;
         top: 0;
@@ -193,17 +215,22 @@
     .delete{
         position: fixed;
         top: 300px;
-        left: 40%;
-        padding-top: 30px;
-        width: 20%;
+        left: 35%;
+        padding-top: 45px;
+        width: 30%;
         margin: 0 auto;
         text-align: center;
-        background: rgba(208, 208, 208, 0.1);
-        box-shadow: 0 0 10px rgba(109, 109, 109, 0.3);
+        /*border: 1px solid #000;*/
+        background: #fff;
+        box-shadow: 0 0 50px rgba(255, 255, 255, .8);
+        font-size: 18px;
+        /*background: rgba(0, 0, 0, .1);*/
+        /*color: #fff;*/
         .btn-box{
+            font-size: 16px;
             display: flex;
-            margin-top: 20px;
-            line-height: 30px;
+            margin-top: 45px;
+            line-height: 50px;
             .xbtn{
                 cursor: pointer;
                 border-top: 1px solid #bababa;
@@ -211,6 +238,7 @@
                 flex-grow: 1;
                 &:nth-child(1){
                     border-right: 1px solid #bababa;
+                    color: #f00;
                 }
             }
         }

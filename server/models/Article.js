@@ -13,8 +13,7 @@ const ArticleSchema = new Schema({
   content: String,
   label: [],
   is_top: Boolean,
-  can_comment: Boolean,
-  is_draft: Boolean
+  can_comment: Boolean
 }, {collection: 'comments'})
 var Article = mongoose.model('Article', ArticleSchema)
 module.exports = Article

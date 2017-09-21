@@ -29,8 +29,9 @@
           </div>
           <div class="form-group">
             <label for="selectCar">文章分类</label>
-            <select class="form-control input-sm" id="selectCar" style="margin-left: 10px">
-              <option v-for="item in getClassifyList">{{item.name}}</option>
+            <select class="form-control input-sm" id="selectCar" style="margin-left: 10px" v-model="selected">
+              <option value="默认分类">默认分类</option>
+              <option v-for="item in getClassifyList" :value="item.name">{{item.name}}</option>
             </select>
           </div>
         </div>
@@ -53,7 +54,7 @@
         </div>
       </div>
     </form>
-
+    <ErrMsgBox :msg="errorMsg" v-if="errorShow"></ErrMsgBox>
   </div>
 
 </template>
@@ -61,18 +62,20 @@
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
+  import ErrMsgBox from '../components/err-msg-box.vue'
   import axios from '~/plugins/axios'
+  import Qs from '~/plugins/qs'
   import { mapGetters } from 'vuex'
   export default {
-    async asyncData () {
+    async fetch ({ store, params }) {
       let { data } = await axios.get('/api/classify')
-      console.log('data', data)
-      return { data }
+      store.dispatch('classify/initClassifyList', data)
     },
     name: 'edit',
     components: {
       VmMarkdown,
-      EditQuill
+      EditQuill,
+      ErrMsgBox
     },
     data: function () {
       return {
@@ -81,8 +84,11 @@
         author: '',
         tag: '',
         content: '',
-        isTop: true,
-        canComment: false
+        selected: '默认分类',
+        isTop: false,
+        canComment: true,
+        errorMsg: 'error',
+        errorShow: false
       }
     },
     methods: {
@@ -121,25 +127,44 @@
           author: this.author,
           state: code,
           current_name: 'admin',
-          publish_time: this.currentTime,
-          classify: '',
+          publish_time: this.currentTime(),
+          images: '',
+          classify: this.selected,
           content: this.content,
-          label: this.parseTag(),
+          label: this.tag,
           is_top: this.isTop,
           can_comment: this.canComment
         }
-        console.log(sendData)
-      },
-      parseTag () {
-        let charStr = ''
-        this.tag.split('').map(char => {
-          if (char !== ' ') {
-            charStr = charStr + char
+        if (!this.title) {
+          this.showErrorBox('文章标题不能为空')
+          return
+        } else if (!this.author) {
+          this.showErrorBox('作者不能为空')
+          return
+        } else if (!this.content) {
+          this.showErrorBox('文章内容不能为空')
+          return
+        }
+        axios.post('/api/article/add', Qs.stringify(sendData)).then(response => {
+          console.log(response.data)
+          if (response.data.status) {
+            this.title = ''
+            this.author = ''
+            this.content = ''
+            this.tag = ''
+            this.isTop = false
+            this.canComment = true
+            this.selected = '默认分类'
+            this.$router.push('/Classified')
           }
         })
-        let tagArr = charStr.split(',')
-        console.log(tagArr)
-        return tagArr
+      },
+      showErrorBox (msg) {
+        this.errorShow = true
+        this.errorMsg = msg
+        setTimeout(() => {
+          this.errorShow = false
+        }, 1000)
       },
       currentTime () {
         let currentDate = new Date()

@@ -11,7 +11,7 @@ router.get('/classify', async (req, res) => {
   res.send(find)
 })
 
-router.post('/classify/:name', async (req, res) => {
+router.post('/classify/add/:name', async (req, res) => {
   let find = await Classify.findOne({name: req.params.name})
   console.log(find)
   if (!find) {
