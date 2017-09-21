@@ -236,6 +236,7 @@
     border: 1px solid #7f828b;
     border-right: 0;
     transition: all .3s;
+    z-index: 10;
     &:hover{
       left: -1px;
       padding-left: 5px;

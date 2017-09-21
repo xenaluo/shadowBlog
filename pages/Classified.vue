@@ -113,9 +113,9 @@
             this.showErrorBox('分类名称不能为空')
             return
           }
-          let path = `/api/classify/update/${this.updateItem.name}`
+          let path = `/api/classify/${this.updateItem.name}`
           let sendData = Qs.stringify({name: this.name})
-          axios.post(path, sendData).then(response => {
+          axios.patch(path, sendData).then(response => {
             console.log(response)
             if (!response.data.status) {
               alert(response.data.msg)
@@ -132,7 +132,7 @@
           if (this.name === '') {
             this.showErrorBox('分类名称不能为空')
           } else {
-            axios.post(`api/classify/add/${this.name}`).then(response => {
+            axios.post(`api/classify/${this.name}`).then(response => {
               if (!response.data.status) {
                 alert(response.data.msg)
               } else {
@@ -154,7 +154,7 @@
         },
         deleteClass (item) {
           console.log(item)
-          axios.post(`api/classify/delete/${item.name}`).then(response => {
+          axios.delete(`api/classify/${item.name}`).then(response => {
             // console.log(response)
             if (!response.data.status) {
               alert(response.data.msg)
