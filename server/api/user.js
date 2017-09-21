@@ -1,12 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const confirmToken = require('../middlewares/confirmToken')
+
 const rand = require('csprng')
 const sha1 = require('sha1')
 let User = require('../models/User')
-
+// 验证用户名是否正确
+router.post('/user', (req, res) => {
+})
 // 修改账户
-router.post('/user', confirmToken, (req, res) => {
+router.post('/updateuser', (req, res) => {
   const salt = rand(160, 36)
   const user = {
     salt: salt,
