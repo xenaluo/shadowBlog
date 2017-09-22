@@ -1,10 +1,15 @@
 import ArticleModel from '../models/Article'
+import InceModel from '../models/Inc'
+// import db from '../db/db'
+
 class Article {
   /**
    * 在构造函数中给类中的方法绑定this
    */
   constructor () {
     this.commitNewArticle = this.commitNewArticle.bind(this)
+    this.id = 0
+    this.oldID = 0
   }
 
   /**
@@ -12,21 +17,35 @@ class Article {
    * @param req
    * @param res
    */
-  commitNewArticle (req, res) {
-    let articleModel = this.articleModel(req.body)
+  async commitNewArticle (req, res) {
+    let articleModel = await this.articleModel(req.body)
     articleModel.save()
       .then(response => {
-        res.send({
-          status: 1,
-          type: 'ADD_ARTICLE_SUCCESS',
-          msg: 'success'
-        })
+        console.log(this.oldID)
+        console.log(this.id)
+        InceModel.update({name: 'article'}, {id: this.id})
+          .then(response => {
+            console.log(response)
+            res.send({
+              status: 1,
+              type: 'ADD_ARTICLE_SUCCESS',
+              msg: 'success'
+            })
+          })
+          .catch(() => {
+            console.log('更新id失败')
+            res.send({
+              status: 0,
+              type: 'ADD_ARTICLE_FAIL',
+              msg: 'error'
+            })
+          })
       })
       .catch(() => {
         res.send({
           status: 0,
           type: 'ADD_ARTICLE_FAIL',
-          msg: 'success'
+          msg: '提交文章失败'
         })
       })
   }
@@ -52,8 +71,11 @@ class Article {
    * @returns {string} 文章id
    * TODO: 生成文章id方法待修改
    */
-  articleID () {
-    return new Date().getTime().toString()
+  async articleID () {
+    let result = await InceModel.findOne()
+    this.id = result.id
+    this.oldID = result.id
+    return this.id++
   }
 
   /**
@@ -61,9 +83,10 @@ class Article {
    * @param data 文章模型的数据
    * @return {Object} 文章模型
    */
-  articleModel (data) {
+  async articleModel (data) {
+    let id = await this.articleID()
     return new ArticleModel({
-      aid: this.articleID(),
+      aid: id,
       title: data.title,
       state: data.state,
       author: data.author,
