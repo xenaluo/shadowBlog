@@ -55,7 +55,6 @@ class Article {
   articleID () {
     return new Date().getTime().toString()
   }
-
   /**
    * 根据ArticleModel生成一个文章模型
    * @param data 文章模型的数据

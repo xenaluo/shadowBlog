@@ -1,4 +1,4 @@
-import express from 'express'
+ import express from 'express'
 import User from '../methods/user-method'
 
 const router = express.Router()
