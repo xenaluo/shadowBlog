@@ -11,7 +11,7 @@
             <li><nuxt-link to="/edit">发布文章</nuxt-link></li>
             <li><nuxt-link to="">文章管理</nuxt-link></li>
             <li><nuxt-link to="/classified">分类管理</nuxt-link></li>
-            <li><nuxt-link to="">站点管理</nuxt-link></li>
+            <li><nuxt-link to="/web">站点管理</nuxt-link></li>
           </ul>
         </section>
       </section>
@@ -21,21 +21,18 @@
 
     </section>
 
-    <my-footer/>
+
   </div>
 </template>
 
 <script>
-import MyFooter from '~/components/Footer.vue'
+
 import axios from '~/plugins/axios'
 export default {
   async asyncData () {
     let { data } = await axios.get('/api/classify')
     console.log('data', data)
     return { items: data }
-  },
-  components: {
-    MyFooter
   }
 }
 </script>
