@@ -6,7 +6,7 @@ import draft from './draft'
 import login from './login'
 import user from './user'
 import comment from './comment'
-import  index_init from './index_init'
+import indexInit from './index_init'
 
 const router = Router()
 router.use(bodyParser.urlencoded({extended: false}))
@@ -17,6 +17,6 @@ router.use(draft)
 router.use(login)
 router.use(user)
 router.use(comment)
-router.use(index_init)
+router.use(indexInit)
 
 export default router

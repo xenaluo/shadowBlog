@@ -13,6 +13,13 @@ class Article {
   }
 
   /**
+   * 查找所有文章
+   */
+  async queryArticleList (req, res) {
+    ArticleModel.find({})
+  }
+
+  /**
    * 提交新文章--入article库
    * @param req
    * @param res

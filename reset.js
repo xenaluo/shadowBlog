@@ -20,8 +20,17 @@ const UserSchema = new Schema({
   salt: String
 }, {collection: 'user'})
 const User = mongoose.model('User', UserSchema)
+
+const incSchema = new Schema({
+  name: String,
+  id: Number
+}, {collection: 'incs'})
+
+const Incs = mongoose.model('Incs', incSchema)
+
 const salt = rand(160, 36)
-function currentTime () {
+
+function currentTime() {
   let currentDate = new Date()
   let year = currentDate.getFullYear()
   let month = currentDate.getMonth() + 1 < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)
@@ -31,17 +40,24 @@ function currentTime () {
   let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
   return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
 }
+
 let time = currentTime()
 let psd = sha1('admin')
 let newpsd = sha1(psd + salt)
 let user1 = new User({
-  username: 'admin1',
+  username: 'admin',
   password: newpsd,
   create_time: time,
   login_time: time,
   permission_code: 777,
   salt: salt
 })
+let articleID = new Incs({
+  name: 'article',
+  id: 0
+})
 user1.save(function () {
-  console.log('ShadowBlog初始化成功,用户名:admin,密码:admin,权限:管理员,登录后请修改账户密码,请删除此文件!')
+  articleID.save(function () {
+    console.log('ShadowBlog初始化成功,用户名:admin,密码:admin,权限:管理员,登录后请修改账户密码,请删除此文件!')
+  })
 })

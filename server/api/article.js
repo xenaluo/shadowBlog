@@ -66,23 +66,7 @@ router.patch('/article/:id', confirmToken, (req, res) => {
   })
 })
 
-// 获取很多文章
-router.get('/articles', (req, res) => {
-  const page = req.query.payload.page
-  const value = req.query.payload.value
-  const limit = req.query.payload.limit - 0 || 4
-  const skip = limit * (page - 1)
-  if (value && value !== '全部') {
-    Article.find({tags: value, isPublish: true}).sort({date: -1}).limit(limit).skip(skip).exec()
-      .then((articles) => {
-        res.send(articles)
-      })
-  } else {
-    Article.find({isPublish: true}).sort({date: -1}).limit(limit).skip(skip).exec().then((articles) => {
-      res.send(articles)
-    })
-  }
-})
+
 // todo: 待修改 --end
 // module.exports = router
 export default router

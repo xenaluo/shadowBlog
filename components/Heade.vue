@@ -84,13 +84,13 @@
   import ArticleList from './index/article-list.vue'
   export default {
     async asyncData () {
-      let {data} = await axios.get('api')
-      return {message: data.message}
+      let {data} = await axios.get('/api/articles')
+      console.log(data)
+      return { indexData: data }
     },
     data: function () {
       return {
-        imgUrl: '',
-        message: ''
+        indexData: {}
       }
     },
     components: {

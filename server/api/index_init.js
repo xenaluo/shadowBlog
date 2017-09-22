@@ -1,26 +1,27 @@
-import Article from '../methods/article-method'
+import Article from '../models/Article'
 import express from 'express'
+import User from '../models/User'
 const router = express.Router()
-import User from  '../models/User'
-
-let init_data = {}
-router.get('/articles',  (req, res) => {
-  let article_query = {
+let initData = {}
+router.get('/articles', (req, res) => {
+  let articleQuery = {
     state: 1
   }
-  Article.find(article_query, function (err,data) {
+  Article.find(articleQuery, function (err, data) {
     if (err) {
       console.log('article find err')
     } else {
-      Object.assign(init_data,data)
-      User.find({username: 'admin'}, function (err,data) {
+      Object.assign(initData, data)
+      User.find({username: 'admin'}, function (err, data) {
         if (err) {
           console.log('user find err')
         } else {
-          Object.assign(init_data,data)
-          console.log(init_data)
+          Object.assign(initData, data)
+          console.log(initData)
+          res.send(initData)
         }
       })
     }
   })
- }
+})
+export default router
