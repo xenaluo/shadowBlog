@@ -1,4 +1,4 @@
-let mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const ArticleSchema = new Schema({
@@ -13,8 +13,7 @@ const ArticleSchema = new Schema({
   content: String,
   label: [],
   is_top: Boolean,
-  can_comment: Boolean,
-  is_draft: Boolean
-}, {collection: 'comments'})
-var Article = mongoose.model('Article', ArticleSchema)
-module.exports = Article
+  can_comment: Boolean
+}, {collection: 'article'})
+
+export default mongoose.model('Article', ArticleSchema)

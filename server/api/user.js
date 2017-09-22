@@ -1,26 +1,25 @@
-const express = require('express')
-const router = express.Router()
+import express from 'express'
+import User from '../methods/user-method'
 
-const rand = require('csprng')
-const sha1 = require('sha1')
-let User = require('../models/User')
+const router = express.Router()
 // 验证用户名是否正确
-router.post('/user', (req, res) => {
-})
+router.post('/user', User.userLogin)
 // 修改账户
-router.post('/updateuser', (req, res) => {
+router.post('/updateuser', User.updateUserInfo)
+export default router
+
+/* 最初存取初始管理员账户部分
   const salt = rand(160, 36)
-  const user = {
-    salt: salt,
-    name: req.body.name,
-    password: sha1(req.body.password + salt)
-  }
-  User.update({_id: req.body.id}, user, (err) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.status(200).send('update successfully')
+  let user = {
+    user_info: {
+      username: req.body.name,
+      password: sha1(req.body.psd + salt),
+      login_time: req.body.time,
+      permission_code: 777, // 最高权限777
+      salt
     }
+  }
+  new User(user).save().then((res) => {
+    console.log('插入成功', res)
   })
-})
-module.exports = router
+ */

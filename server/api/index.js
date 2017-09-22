@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import bodyParser from 'body-parser'
-import users from './users'
 import classify from './classify'
 import article from './article'
 import draft from './draft'
@@ -11,7 +10,6 @@ import comment from './comment'
 const router = Router()
 router.use(bodyParser.urlencoded({extended: false}))
 // Add USERS Routes
-router.use(users)
 router.use(classify)
 router.use(article)
 router.use(draft)

@@ -29,8 +29,9 @@
           </div>
           <div class="form-group">
             <label for="selectCar">文章分类</label>
-            <select class="form-control input-sm" id="selectCar" style="margin-left: 10px">
-              <option v-for="item in getClassifyList">{{item.name}}</option>
+            <select class="form-control input-sm" id="selectCar" style="margin-left: 10px" v-model="selected">
+              <option value="默认分类">默认分类</option>
+              <option v-for="item in getClassifyList" :value="item.name">{{item.name}}</option>
             </select>
           </div>
         </div>
@@ -53,26 +54,28 @@
         </div>
       </div>
     </form>
-
+    <ErrMsgBox></ErrMsgBox>
   </div>
-
 </template>
 
 <script>
   import VmMarkdown from '../components/edit/vm-markdown.vue'
   import EditQuill from '../components/edit/edit-quill.vue'
+  import ErrMsgBox from '../components/err-msg-box.vue'
+  import Tools from '~/assets/js/tools'
   import axios from '~/plugins/axios'
+  import Qs from '~/plugins/qs'
   import { mapGetters } from 'vuex'
   export default {
-    async asyncData () {
+    async fetch ({ store, params }) {
       let { data } = await axios.get('/api/classify')
-      console.log('data', data)
-      return { data }
+      store.dispatch('classify/initClassifyList', data)
     },
     name: 'edit',
     components: {
       VmMarkdown,
-      EditQuill
+      EditQuill,
+      ErrMsgBox
     },
     data: function () {
       return {
@@ -81,15 +84,13 @@
         author: '',
         tag: '',
         content: '',
-        isTop: true,
-        canComment: false
+        selected: '默认分类',
+        isTop: false,
+        canComment: true
       }
     },
     methods: {
       showHtml (html) {
-        // get html string here
-        //  alert(html)
-        console.log(html)
         this.content = html
       },
       showEditor () {
@@ -120,36 +121,32 @@
           title: this.title,
           author: this.author,
           state: code,
-          current_name: 'admin',
-          publish_time: this.currentTime,
-          classify: '',
+          current_name: localStorage.getItem('name') || 'admin1',
+          publish_time: Tools.currentTime(),
+          images: '',
+          classify: this.selected,
           content: this.content,
-          label: this.parseTag(),
+          label: this.tag,
           is_top: this.isTop,
           can_comment: this.canComment
         }
-        console.log(sendData)
-      },
-      parseTag () {
-        let charStr = ''
-        this.tag.split('').map(char => {
-          if (char !== ' ') {
-            charStr = charStr + char
-          }
-        })
-        let tagArr = charStr.split(',')
-        console.log(tagArr)
-        return tagArr
-      },
-      currentTime () {
-        let currentDate = new Date()
-        let year = currentDate.getFullYear()
-        let month = currentDate.getMonth() + 1 < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)
-        let date = currentDate.getDate() < 10 ? '0' + currentDate.getDate() : currentDate.getDate()
-        let hours = currentDate.getHours() < 10 ? '0' + currentDate.getHours() : currentDate.getHours()
-        let minutes = currentDate.getMinutes() < 10 ? '0' + currentDate.getMinutes() : currentDate.getMinutes()
-        let seconds = currentDate.getSeconds() < 10 ? '0' + currentDate.getSeconds() : currentDate.getSeconds()
-        return year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
+        if (!this.title) {
+          Tools.showErrorBox(this.$store, '文章标题不能为空')
+          return
+        } else if (!this.author) {
+          Tools.showErrorBox(this.$store, '作者不能为空')
+          return
+        } else if (!this.content) {
+          Tools.showErrorBox(this.$store, '文章内容不能为空')
+          return
+        }
+        axios.post('/api/article/add', Qs.stringify(sendData))
+          .then(response => {
+            console.log(response.data)
+            if (response.data.status) {
+              this.$router.push('/classified')
+            }
+          })
       }
     },
     computed: {
@@ -211,6 +208,7 @@
     border: 1px solid #7f828b;
     border-right: 0;
     transition: all .3s;
+    z-index: 10;
     &:hover{
       left: -1px;
       padding-left: 5px;

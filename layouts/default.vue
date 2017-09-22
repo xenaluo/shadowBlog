@@ -7,10 +7,10 @@
         <section class = "title">
           <h3>shadowBlog</h3>
           <ul class = "left_list">
-            <li><nuxt-link to="/">用户信息</nuxt-link></li>
+            <li><nuxt-link to="">用户信息</nuxt-link></li>
             <li><nuxt-link to="/edit">发布文章</nuxt-link></li>
             <li><nuxt-link to="">文章管理</nuxt-link></li>
-            <li><nuxt-link to="/Classified">分类管理</nuxt-link></li>
+            <li><nuxt-link to="/classified">分类管理</nuxt-link></li>
             <li><nuxt-link to="">站点管理</nuxt-link></li>
           </ul>
         </section>
@@ -27,8 +27,13 @@
 
 <script>
 import MyFooter from '~/components/Footer.vue'
-
+import axios from '~/plugins/axios'
 export default {
+  async asyncData () {
+    let { data } = await axios.get('/api/classify')
+    console.log('data', data)
+    return { items: data }
+  },
   components: {
     MyFooter
   }

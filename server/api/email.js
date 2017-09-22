@@ -1,3 +1,4 @@
+// FIXME: 不知道咋改
 const nodemailer = require('nodemailer')
 
 let transporter = nodemailer.createTransport({

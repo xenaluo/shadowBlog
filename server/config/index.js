@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   jwt: {
     cert: '123'
   }
