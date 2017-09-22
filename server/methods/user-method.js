@@ -34,5 +34,23 @@ class User {
       }
     })
   }
+  async bolgmess (req, res) {
+    let username = req.body.adminname
+    console.log(username)
+    const blogmess = {
+      blog_name: req.body.blogname,
+      blog_desc: req.body.blogdesc,
+      copyright: req.body.beiannum,
+      beian: req.body.webnum
+    }
+    UserModel.update({username: username}, blogmess, (err) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('geng')
+        res.status(200).send('1')
+      }
+    })
+  }
 }
 export default new User()

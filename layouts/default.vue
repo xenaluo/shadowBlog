@@ -21,21 +21,18 @@
 
     </section>
 
-    <my-footer/>
+
   </div>
 </template>
 
 <script>
-import MyFooter from '~/components/Footer.vue'
+
 import axios from '~/plugins/axios'
 export default {
   async asyncData () {
     let { data } = await axios.get('/api/classify')
     console.log('data', data)
     return { items: data }
-  },
-  components: {
-    MyFooter
   }
 }
 </script>
