@@ -9,8 +9,8 @@
           <ul class = "left_list">
             <li><nuxt-link to="">用户信息</nuxt-link></li>
             <li><nuxt-link to="/edit">发布文章</nuxt-link></li>
-            <li><nuxt-link to="">文章管理</nuxt-link></li>
-            <li><nuxt-link to="/classified">分类管理</nuxt-link></li>
+            <li><nuxt-link to="/manage/article">文章管理</nuxt-link></li>
+            <li><nuxt-link to="/manage/classified">分类管理</nuxt-link></li>
             <li><nuxt-link to="">站点管理</nuxt-link></li>
           </ul>
         </section>
