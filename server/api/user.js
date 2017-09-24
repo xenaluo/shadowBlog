@@ -6,6 +6,8 @@ const router = express.Router()
 router.post('/user', User.userLogin)
 // 修改账户
 router.post('/updateuser', User.updateUserInfo)
+// 博客信息
+router.post('/blogmess', User.bolgmess)
 export default router
 
 /* 最初存取初始管理员账户部分
