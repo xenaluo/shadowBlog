@@ -13,6 +13,13 @@ class Article {
   }
 
   /**
+   * 查找所有文章
+   */
+  async queryArticleList (req, res) {
+    ArticleModel.find({})
+  }
+
+  /**
    * 提交新文章--入article库
    * @param req
    * @param res
@@ -77,7 +84,6 @@ class Article {
     this.oldID = result.id
     return this.id++
   }
-
   /**
    * 根据ArticleModel生成一个文章模型
    * @param data 文章模型的数据
