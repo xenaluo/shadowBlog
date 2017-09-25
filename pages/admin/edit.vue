@@ -59,9 +59,9 @@
 </template>
 
 <script>
-  import VmMarkdown from '../components/edit/vm-markdown.vue'
-  import EditQuill from '../components/edit/edit-quill.vue'
-  import ErrMsgBox from '../components/err-msg-box.vue'
+  import VmMarkdown from '../../components/edit/vm-markdown.vue'
+  import EditQuill from '../../components/edit/edit-quill.vue'
+  import ErrMsgBox from '../../components/err-msg-box.vue'
   import Tools from '~/assets/js/tools'
   import axios from '~/plugins/axios'
   import Qs from '~/plugins/qs'

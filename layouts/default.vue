@@ -8,10 +8,10 @@
           <h3>shadowBlog</h3>
           <ul class = "left_list">
             <li><nuxt-link to="">用户信息</nuxt-link></li>
-            <li><nuxt-link to="/edit">发布文章</nuxt-link></li>
-            <li><nuxt-link to="/article">文章管理</nuxt-link></li>
-            <li><nuxt-link to="/classified">分类管理</nuxt-link></li>
-            <li><nuxt-link to="/web">站点管理</nuxt-link></li>
+            <li><nuxt-link to="/admin/edit">发布文章</nuxt-link></li>
+            <li><nuxt-link to="/admin/article">文章管理</nuxt-link></li>
+            <li><nuxt-link to="/admin/classified">分类管理</nuxt-link></li>
+            <li><nuxt-link to="/admin/web">站点管理</nuxt-link></li>
           </ul>
         </section>
       </section>

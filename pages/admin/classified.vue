@@ -92,7 +92,7 @@
   </div>
 </template>
 <script>
-  import ErrMsgBox from '../components/err-msg-box.vue'
+  import ErrMsgBox from '../../components/err-msg-box.vue'
   import axios from '~/plugins/axios'
   import Qs from '~/plugins/qs'
   import {mapGetters} from 'vuex'
@@ -180,7 +180,7 @@
         if (this.name === '') {
           Tools.showErrorBox(this.$store, '分类名称不能为空')
         } else {
-          axios.post(`api/classify/${this.name}`).then(response => {
+          axios.post(`/api/classify/${this.name}`).then(response => {
             if (!response.data.status) {
               Tools.showErrorBox(this.$store, response.data.msg)
             } else {
@@ -209,7 +209,7 @@
        * @param item 要删除的分类
        */
       deleteClass (item) {
-        axios.delete(`api/classify/${item.name}`).then(response => {
+        axios.delete(`/api/classify/${item.name}`).then(response => {
           if (!response.data.status) {
             Tools.showErrorBox(this.$store, response.data.msg)
           } else {

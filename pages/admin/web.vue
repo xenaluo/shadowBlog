@@ -61,7 +61,7 @@
           beiannum: this.beiannum,
           webnum: this.webnum
         }
-        axios.post('api/blogmess', Qs.stringify(blogMessage)).then(response => {
+        axios.post('/api/blogmess', Qs.stringify(blogMessage)).then(response => {
           if (response.data === 1) {
             console.log('666')
           }
