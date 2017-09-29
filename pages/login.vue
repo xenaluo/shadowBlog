@@ -36,8 +36,8 @@ export default {
   layout: 'empti',
   data: function () {
     return {
-      username: '',
-      psd: ''
+      username: 'admin',
+      psd: 'admin'
     }
   },
   components: {
@@ -54,17 +54,24 @@ export default {
         time: time
       }
       // 发送账户信息
-      axios.post('/api/user', Qs.stringify(message)).then(response => {
+      axios.post('/api/login', Qs.stringify(message)).then(response => {
         if (response.data === 0) {
           Tools.showErrorBox(this.$store, '密码错误')
-        } else if (response.data === 1) {
-          localStorage.setItem('name', name)
-          console.log(localStorage.getItem('name'))
-          this.$router.push('/admin/edit')
-          // alert('密码正确')
         } else if (response.data === 2) {
           Tools.showErrorBox(this.$store, '用户不存在')
+        } else {
+          // console.log(response.data)
+          let token = response.data.token
+          localStorage.setItem('token', token)
+          console.log('88' + localStorage.getItem('token'))
+          this.$router.replace('/admin/edit')
+          // let token = localStorage.getItem('token')
         }
+        // if (response.data === 1) {
+        //   localStorage.setItem('name', name)
+        //   console.log(localStorage.getItem('name'))
+        //   this.$router.push('/admin/edit')
+        // } 
       })
     }
   }
