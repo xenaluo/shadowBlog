@@ -3,7 +3,9 @@
     <span class="change-editor" @click="showEditor">{{changeEditor}}</span>
     <form action="">
       <div class="form-group">
-        <input type="text" class="form-control" id="titleInput" placeholder="Title" v-model="title">
+        <input type="text" class="form-control"
+               placeholder="Title"
+               v-model="title">
       </div>
       <div class="form-group">
         <!--<label for="exampleInputName2">Name</label>-->
@@ -31,7 +33,7 @@
             <label for="selectCar">文章分类</label>
             <select class="form-control input-sm" id="selectCar" style="margin-left: 10px" v-model="selected">
               <option value="默认分类">默认分类</option>
-              <option v-for="item in getClassifyList" :value="item.name">{{item.name}}</option>
+              <option v-for="item in classifyList" :value="item.name">{{item.name}}</option>
             </select>
           </div>
         </div>
@@ -65,11 +67,18 @@
   import Tools from '~/assets/js/tools'
   import axios from '~/plugins/axios'
   import Qs from '~/plugins/qs'
-  import { mapGetters } from 'vuex'
   export default {
-    async fetch ({ store, params }) {
-      let { data } = await axios.get('/api/classify')
-      store.dispatch('classify/initClassifyList', data)
+    async asyncData ({ params, query, router }) {
+      console.log('params', params)
+      console.log('query', query)
+      let {data} = await axios.get(`/api/article?aid=${query.id}`)
+      console.log(data)
+      return {
+        title: data.article ? data.article.title : '',
+        author: data.article ? data.article.author : '',
+        content: data.article ? data.article.content : '',
+        classifyList: data.classify
+      }
     },
     name: 'edit',
     components: {
@@ -80,7 +89,6 @@
     data: function () {
       return {
         editor: 0,
-        title: '',
         author: '',
         tag: '',
         content: '',
@@ -88,6 +96,9 @@
         isTop: false,
         canComment: true
       }
+    },
+    created () {
+      console.log(this.$route)
     },
     methods: {
       showHtml (html) {
@@ -144,15 +155,12 @@
           .then(response => {
             console.log(response.data)
             if (response.data.status) {
-              this.$router.push('/classified')
+              this.$router.push('/article')
             }
           })
       }
     },
     computed: {
-      ...mapGetters('classify', [
-        'getClassifyList'
-      ]),
       changeEditor () {
         if (this.editor) {
           return 'M'

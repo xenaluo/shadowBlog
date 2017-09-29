@@ -1,4 +1,5 @@
 import ArticleModel from '../models/Article'
+import ClassifyModel from '../models/Classify'
 import InceModel from '../models/Inc'
 // import db from '../db/db'
 
@@ -18,7 +19,32 @@ class Article {
   async queryArticleList (req, res) {
     ArticleModel.find({})
   }
-
+  async getIssueArticle (req, res) {
+    console.log(req.query)
+    let pageSize = parseInt(req.query.pageSize || 10)
+    let currentPage = parseInt(req.query.currentPage)
+    let skipNum = (currentPage - 1) * pageSize
+    console.log(pageSize, currentPage, skipNum)
+    console.log(typeof pageSize, typeof currentPage, typeof skipNum)
+    let sort = {'is_top': -1}
+    let issueList = await ArticleModel
+      .find({state: 1})
+      .sort(sort)
+      .skip(skipNum)
+      .limit(pageSize)
+    // console.log(issueList)
+    res.send(issueList)
+  }
+  async getSingleArticle (req, res) {
+    console.log('query', req.query, req.headers.referer)
+    let singleArticle = await ArticleModel.findOne({aid: req.query.aid})
+    let classify = await ClassifyModel.find()
+    let responseDate = {
+      article: singleArticle,
+      classify: classify
+    }
+    res.send(responseDate)
+  }
   /**
    * 提交新文章--入article库
    * @param req
@@ -62,6 +88,7 @@ class Article {
    * @returns {Array} 解析后的标签数组
    * TODO: '' ——>split
    */
+
   parseTag (tag) {
     let charStr = ''
     tag.split('').map(char => {
@@ -72,7 +99,6 @@ class Article {
     let tagArr = charStr !== '' ? charStr.split(',') : []
     return tagArr
   }
-
   /**
    * 设置文章id为时间戳
    * @returns {string} 文章id

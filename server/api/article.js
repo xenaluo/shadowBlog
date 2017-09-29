@@ -1,40 +1,34 @@
 import Article from '../methods/article-method'
 import express from 'express'
-import db from '../db/db.js'
+// import db from '../db/db.js'
 import confirmToken from '../middlewares/confirmToken'
 const router = express.Router()
 
 // 发布文章
 router.post('/article/add', Article.commitNewArticle)
 
+router.get('/article/issue', Article.getIssueArticle)
+
 // todo: 待修改 --start
 // 获取某篇文章
-router.get('/article/:id', (req, res) => {
-  Article.findOne({id: req.params.id}, (err, doc) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.status(200).send(doc)
-    }
-  })
-})
+router.get('/article', Article.getSingleArticle)
 
 // 删除文章并删除文章下面的评论
-router.delete('/article/:id', confirmToken, (req, res) => {
-  Article.remove({id: req.params.id}, (err, data) => {
-    if (err) {
-      console.log(err)
-    } else {
-      db.Comment.remove({articleId: req.params.id}, (err, data) => {
-        if (err) {
-          console.log(err)
-        } else {
-          res.status(200).send('succeed in deleting ---' + data)
-        }
-      })
-    }
-  })
-})
+// router.delete('/article/:id', confirmToken, (req, res) => {
+//   Article.remove({id: req.params.id}, (err, data) => {
+//     if (err) {
+//       console.log(err)
+//     } else {
+//       db.Comment.remove({articleId: req.params.id}, (err, data) => {
+//         if (err) {
+//           console.log(err)
+//         } else {
+//           res.status(200).send('succeed in deleting ---' + data)
+//         }
+//       })
+//     }
+//   })
+// })
 
 // 更新文章
 router.patch('/article/:id', confirmToken, (req, res) => {
@@ -65,7 +59,6 @@ router.patch('/article/:id', confirmToken, (req, res) => {
     }
   })
 })
-
 
 // todo: 待修改 --end
 // module.exports = router

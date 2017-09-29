@@ -19,25 +19,25 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td class="col-md-1">ID</td>
-          <td class="col-md-1">分类
+        <tr v-for="item in issueList">
+          <td class="col-md-1">{{item.aid}}</td>
+          <td class="col-md-1">{{item.classify}}
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
           </td>
-          <td class="col-md-1">作者</td>
-          <td class="col-md-3">标题</td>
-          <td class="col-md-2">日期</td>
-          <td class="col-md-1">评论</td>
-          <td class="col-md-1">状态</td>
-          <td class="col-md-1">
+          <td class="col-md-1">{{item.author}}</td>
+          <td class="col-md-3">{{item.title}}</td>
+          <td class="col-md-2">{{item.publish_time}}</td>
+          <td class="col-md-1">0</td>
+          <td class="col-md-1">{{item.is_top?'置顶':''}}</td>
+          <td class="col-md-2">
             <button type="button"
                     class="btn btn-primary btn-xs"
-                    @click="showUpdateclass(item)">
+                    @click="modifyArticle(item.aid)">
               修改</button>
             &nbsp;&nbsp;
             <button type="button"
                     class="btn btn-danger btn-xs"
-                    @click="showDeleteClass(item)">
+                    @click="deleteArticle(item.aid)">
               删除</button>
           </td>
           <td class="col-md-1"></td>
@@ -69,9 +69,29 @@
 </template>
 
 <script>
+  import axios from '~/plugins/axios'
   export default {
+    async asyncData ({ params }) {
+      let {data} = await axios.get(`/api/article/issue?currentPage=${1}`)
+      console.log('data', data.length)
+      data.map(item => {
+        console.log(item.is_top)
+      })
+      return { issueList: data }
+    },
     data () {
       return {}
+    },
+    computed: {
+    },
+    methods: {
+      modifyArticle (itemID) {
+        console.log(itemID)
+        this.$router.push(`/edit?id=${itemID}`)
+      },
+      deleteArticle (item) {
+        console.log(item)
+      }
     }
   }
 </script>
