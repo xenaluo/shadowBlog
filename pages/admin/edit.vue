@@ -89,7 +89,6 @@
     data: function () {
       return {
         editor: 0,
-        author: '',
         tag: '',
         content: '',
         selected: '默认分类',
@@ -155,7 +154,7 @@
           .then(response => {
             console.log(response.data)
             if (response.data.status) {
-              this.$router.push('/article')
+              this.$router.push('/admin/article')
             }
           })
       }

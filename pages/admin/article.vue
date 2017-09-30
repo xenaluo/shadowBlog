@@ -87,7 +87,7 @@
     methods: {
       modifyArticle (itemID) {
         console.log(itemID)
-        this.$router.push(`/edit?id=${itemID}`)
+        this.$router.push(`/admin/edit?id=${itemID}`)
       },
       deleteArticle (item) {
         console.log(item)

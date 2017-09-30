@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken')
-const secret = require('../config/index.js').jwt
+import jwt from 'jsonwebtoken'
+import config from '../config'
+const secret = config.jwt
 
 // 检查token是否正确
 const confirmToken = (req, res, next) => {
@@ -18,4 +19,4 @@ const confirmToken = (req, res, next) => {
   }
 }
 
-module.exports = confirmToken
+export default confirmToken

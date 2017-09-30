@@ -81,7 +81,7 @@ import * as axios from 'axios'
 
 // 创建实例时设置配置的默认值
 let instance = axios.create({
-  baseURL: `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3000}`
+  // baseURL: `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3000}`
 })
 if (typeof document === 'object') {
   let AUTH_TOKEN = localStorage.getItem('token')
