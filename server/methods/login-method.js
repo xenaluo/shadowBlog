@@ -9,7 +9,7 @@ class Login {
     this.login = this.login.bind(this)
   }
   async login (req, res) {
-    console.log('666', req.headers)
+    // console.log('666', req.headers)
     // UserModel.findOne({username: req.body.name}, (err, doc) => {
     //   if (err) {
     //     console.log(err)

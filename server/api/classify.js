@@ -4,15 +4,15 @@ import confirmToken from '../middlewares/confirmToken'
 const router = Router()
 
 // 获取分类
-router.get('/classify', confirmToken, Classify.getClassifyList)
+router.get('/classify', Classify.getClassifyList)
 
 // 增加分类
-router.post('/classify/:name', confirmToken, Classify.addClassify)
+router.post('/classify/:name', Classify.addClassify)
 
 // 更新分类
-router.patch('/classify/:name', confirmToken, Classify.updateClassify)
+router.patch('/classify/:name', Classify.updateClassify)
 
 // 删除分类
-router.delete('/classify/:name', confirmToken, Classify.deleteClassify)
+router.delete('/classify/:name', Classify.deleteClassify)
 
 export default router

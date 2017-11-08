@@ -71,6 +71,9 @@ export default {
   font-size: 2.5em;
   margin: 0;
 }
+.left_list {
+  padding-left: 40px;
+}
  .left_list >a:hover {
   text-dectoration: none;
 }

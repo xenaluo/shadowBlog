@@ -4,17 +4,19 @@
     <form action="">
       <div class="form-group">
         <input type="text" class="form-control"
-               placeholder="Title"
+               placeholder="文章标题"
                v-model="title">
       </div>
       <div class="form-group">
         <!--<label for="exampleInputName2">Name</label>-->
-        <input type="text" class="form-control" id="authorInput" placeholder="Author" v-model="author">
+        <input type="text" class="form-control" id="authorInput" placeholder="作者" v-model="author">
       </div>
       <div id="edit">
         <VmMarkdown v-if="!editor"
                     width="100%"
                     height="500px"
+                    :markdStr="md"
+                    :htmlStr="content"
                     v-on:gethtml="showHtml"
                     class="markdown">
         </VmMarkdown>
@@ -72,11 +74,13 @@
       console.log('params', params)
       console.log('query', query)
       let {data} = await axios.get(`/api/article?aid=${query.id}`)
-      console.log(data)
+      console.log('tag', data.article)
       return {
+        tag: data.article ? data.article.label.join(',') : '',
         title: data.article ? data.article.title : '',
         author: data.article ? data.article.author : '',
         content: data.article ? data.article.content : '',
+        md: data.article ? data.article.md_str : '',
         classifyList: data.classify
       }
     },
@@ -90,44 +94,50 @@
       return {
         editor: 0,
         tag: '',
-        content: '',
         selected: '默认分类',
         isTop: false,
-        canComment: true
+        canComment: true,
+        md: ''
       }
     },
     created () {
       console.log(this.$route)
     },
     methods: {
-      showHtml (html) {
+      /**
+       * 监听子组件的回调函数
+       * @param html html部分str
+       * @param md markdown编辑器部分str
+       */
+      showHtml (html, md) {
         this.content = html
+        this.md = md
       },
+      /**
+       * 切换富文本编辑器和markdown编辑器
+       */
       showEditor () {
         this.editor = !this.editor
       },
-      selectTheme (evt) {
-        if (evt.target.tagName === 'SPAN') {
-          let theme = evt.target.dataset.theme
-          let themeType = document.querySelector('.theme-type')
-          let spans = evt.target.parentNode.querySelectorAll('span')
-          spans.forEach(elem => {
-            elem.style = ''
-          })
-          this.theme = theme
-          themeType.innerText = theme
-          evt.target.style.width = '28px'
-          evt.target.style.height = '28px'
-        }
-      },
+      /**
+       * 是否置顶
+       */
       handleTop () {
         this.isTop = !this.isTop
       },
+      /**
+       * 是否允许评论
+       */
       handleComment () {
         this.canComment = !this.canComment
       },
+      /**
+       * 点击[存草稿]/[发布文章]
+       * @param code  0:存草稿  1：发布文章
+       */
       commitArticle (code) {
         let sendData = {
+          id: this.$route.query.id,
           title: this.title,
           author: this.author,
           state: code,
@@ -135,6 +145,7 @@
           publish_time: Tools.currentTime(),
           images: '',
           classify: this.selected,
+          md_str: this.md,
           content: this.content,
           label: this.tag,
           is_top: this.isTop,
@@ -160,6 +171,7 @@
       }
     },
     computed: {
+      // 切换富文本编辑器和markdown编辑器
       changeEditor () {
         if (this.editor) {
           return 'M'
@@ -173,7 +185,6 @@
 </script>
 
 <style lang="scss">
-
   #edit {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
      -webkit-font-smoothing: antialiased;
@@ -234,8 +245,5 @@
       transform: rotateZ(45deg);
     }
   }
-
-
-
 </style>
 

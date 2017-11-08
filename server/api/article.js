@@ -8,27 +8,12 @@ const router = express.Router()
 router.post('/article/add', Article.commitNewArticle)
 
 router.get('/article/issue', Article.getIssueArticle)
+router.get('/article/draft', Article.getDraftArticle)
 
+router.post('/article/delete', Article.deleteArticle)
 // todo: 待修改 --start
 // 获取某篇文章
 router.get('/article', Article.getSingleArticle)
-
-// 删除文章并删除文章下面的评论
-// router.delete('/article/:id', confirmToken, (req, res) => {
-//   Article.remove({id: req.params.id}, (err, data) => {
-//     if (err) {
-//       console.log(err)
-//     } else {
-//       db.Comment.remove({articleId: req.params.id}, (err, data) => {
-//         if (err) {
-//           console.log(err)
-//         } else {
-//           res.status(200).send('succeed in deleting ---' + data)
-//         }
-//       })
-//     }
-//   })
-// })
 
 // 更新文章
 router.patch('/article/:id', confirmToken, (req, res) => {

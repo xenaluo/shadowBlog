@@ -19,24 +19,69 @@ class Article {
   async queryArticleList (req, res) {
     ArticleModel.find({})
   }
+
+  /**
+   * 查找已发布文章
+   * @param req
+   * @param res
+   * @return {Promise.<void>}
+   */
   async getIssueArticle (req, res) {
-    console.log(req.query)
-    let pageSize = parseInt(req.query.pageSize || 10)
-    let currentPage = parseInt(req.query.currentPage)
-    let skipNum = (currentPage - 1) * pageSize
-    console.log(pageSize, currentPage, skipNum)
-    console.log(typeof pageSize, typeof currentPage, typeof skipNum)
+    // console.log(req.query)
+    // let pageSize = parseInt(req.query.pageSize || 10)
+    // let currentPage = parseInt(req.query.currentPage)
+    // let skipNum = (currentPage - 1) * pageSize
+    // console.log(pageSize, currentPage, skipNum)
+    // console.log(typeof pageSize, typeof currentPage, typeof skipNum)
     let sort = {'is_top': -1}
     let issueList = await ArticleModel
       .find({state: 1})
       .sort(sort)
+      // .skip(skipNum)
+      // .limit(pageSize)
+    // console.log(issueList)
+    let count = await ArticleModel.count({state: 1})
+    let data = {
+      issueList: issueList,
+      count: count
+    }
+    res.send(data)
+  }
+  /**
+   * 查找草稿箱文章
+   * @param req
+   * @param res
+   * @return {Promise.<void>}
+   */
+  async getDraftArticle (req, res) {
+    console.log(req.query)
+    let pageSize = parseInt(req.query.pageSize || 10)
+    let currentPage = parseInt(req.query.currentPage || 1)
+    let skipNum = (currentPage - 1) * pageSize
+    console.log(pageSize, currentPage, skipNum)
+    console.log(typeof pageSize, typeof currentPage, typeof skipNum)
+    let sort = {'is_top': -1}
+    let draftList = await ArticleModel
+      .find({state: 0})
+      .sort(sort)
       .skip(skipNum)
       .limit(pageSize)
     // console.log(issueList)
-    res.send(issueList)
+    let count = await ArticleModel.count({state: 0})
+    let data = {
+      draftList: draftList,
+      count: count
+    }
+    res.send(data)
   }
+
+  /**
+   * 根据id查找一篇文章
+   * @param req
+   * @param res
+   * @return {Promise.<void>}
+   */
   async getSingleArticle (req, res) {
-    console.log('query', req.query, req.headers.referer)
     let singleArticle = await ArticleModel.findOne({aid: req.query.aid})
     let classify = await ClassifyModel.find()
     let responseDate = {
@@ -49,36 +94,102 @@ class Article {
    * 提交新文章--入article库
    * @param req
    * @param res
+   *
+   * 先判断数据库中是否已经存在当前文章的id
+   * 如果存在，更新文章
+   * 如果不存在，创建新文章
    */
   async commitNewArticle (req, res) {
-    let articleModel = await this.articleModel(req.body)
-    articleModel.save()
-      .then(response => {
-        console.log(this.oldID)
-        console.log(this.id)
-        InceModel.update({name: 'article'}, {id: this.id})
-          .then(response => {
-            console.log(response)
-            res.send({
-              status: 1,
-              type: 'ADD_ARTICLE_SUCCESS',
-              msg: 'success'
-            })
+    let articleLive = await ArticleModel.findOne({aid: req.body.id})
+    console.log('a', req.body.id, articleLive)
+    if (articleLive) {
+      console.log('这是一篇存在的文章，将要更新文章内容')
+      let updateData = {
+        title: req.body.title,
+        state: req.body.state,
+        author: req.body.author,
+        current_name: req.body.current_name,
+        publish_time: req.body.publish_time,
+        images: req.body.image,
+        classify: req.body.classify,
+        md_str: req.body.md_str,
+        content: req.body.content,
+        label: this.parseTag(req.body.label),
+        is_top: req.body.is_top,
+        can_comment: req.body.can_comment
+      }
+      ArticleModel.update({aid: req.body.id}, updateData)
+        .then(response => {
+          console.log(response)
+          res.send({
+            status: 1,
+            type: 'UPDATE_ARTICLE_SUCCESS',
+            msg: 'success'
           })
-          .catch(() => {
-            console.log('更新id失败')
-            res.send({
-              status: 0,
-              type: 'ADD_ARTICLE_FAIL',
-              msg: 'error'
-            })
+        })
+        .catch(() => {
+          console.log('更新文章失败')
+          res.send({
+            status: 0,
+            type: 'UPDATE_ARTICLE_FAIL',
+            msg: 'error'
           })
+        })
+    } else {
+      let articleModel = await this.articleModel(req.body)
+      articleModel.save()
+        .then(response => {
+          console.log(this.oldID)
+          console.log(this.id)
+          InceModel.update({name: 'article'}, {id: this.id})
+            .then(response => {
+              console.log(response)
+              res.send({
+                status: 1,
+                type: 'ADD_ARTICLE_SUCCESS',
+                msg: 'success'
+              })
+            })
+            .catch(() => {
+              console.log('更新id失败')
+              res.send({
+                status: 0,
+                type: 'ADD_ARTICLE_FAIL',
+                msg: 'error'
+              })
+            })
+        })
+        .catch(() => {
+          res.send({
+            status: 0,
+            type: 'ADD_ARTICLE_FAIL',
+            msg: '提交文章失败'
+          })
+        })
+    }
+  }
+
+  /**
+   * 删除文章--从article库中删除
+   * @param req
+   * @param res
+   * 从article库中找到并删除
+   */
+  deleteArticle (req, res) {
+    console.log(req)
+    ArticleModel.remove({aid: req.query.id})
+      .then(result => {
+        res.send({
+          status: 1,
+          type: 'ARTICLE_REMOVE_SUCCESS',
+          msg: 'success'
+        })
       })
       .catch(() => {
         res.send({
           status: 0,
-          type: 'ADD_ARTICLE_FAIL',
-          msg: '提交文章失败'
+          type: 'ARTICLE_REMOVE_FAIL',
+          msg: '删除失败'
         })
       })
   }
@@ -86,9 +197,8 @@ class Article {
    * 解析request中的标签字符串为数组
    * @param tag request中的标签字符串
    * @returns {Array} 解析后的标签数组
-   * TODO: '' ——>split
+   * TODO: '' ——>split, 待修改为前端变字符串为数组并实时转换为button
    */
-
   parseTag (tag) {
     let charStr = ''
     tag.split('').map(char => {
@@ -126,6 +236,7 @@ class Article {
       publish_time: data.publish_time,
       images: data.image,
       classify: data.classify,
+      md_str: data.md_str,
       content: data.content,
       label: this.parseTag(data.label),
       is_top: data.is_top,
