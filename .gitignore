@@ -16,7 +16,6 @@ dist
 build
 
 # eslint
-.eslintrc.js
 
 # yarn
 yarn.lock
