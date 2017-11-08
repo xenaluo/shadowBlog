@@ -38,3 +38,62 @@ ul>li{
   list-style: none;
 }
 
+
+.body .container
+  {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+  }
+
+.body .button, .button:visited
+  {
+    display: inline-block;
+    color: black;
+    letter-spacing: 1px;
+    background-color: #fff;
+    border: 2px solid #000;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 15px 45px;
+  }
+
+.body .button:hover, .button:focus
+  {
+    color: #fff;
+    background-color: #000;
+  }
+
+.body .title
+  {
+    color: #000;
+    font-weight: 300;
+    font-size: 2.5em;
+    margin: 0;
+  }
+.body .left_list >a:hover {
+    text-dectoration: none;
+  }
+.body .left {
+    background: black;
+    height: 800px;
+  }
+.body .right {
+    position: relative;
+    height:800px;
+    overflow: hidden;
+    border:1px solid black;
+  }
+.body .left_list>li>a {
+    font-size: 16px;
+    color:white;
+  }
+.body .title>h3 {
+    padding: 5px;
+    color:white;
+    font-weight: bold;
+    text-align: center;
+  }
+
+

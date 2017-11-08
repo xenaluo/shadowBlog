@@ -10,6 +10,7 @@ const ArticleSchema = new Schema({
   publish_time: String,
   images: [],
   classify: String,
+  md_str: String,
   content: String,
   label: [],
   is_top: Boolean,

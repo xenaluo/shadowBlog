@@ -1,28 +1,28 @@
 <template>
   <div class="loginbg">
-    <div class="conbg">
-      <img src="../assets/img/logo3.png">
+    <!--<div class="conbg">-->
+      <img src="../assets/img/logo2.jpeg">
       <form class="connect">
         <div class="form-group">
-          <label>用户名</label>
+          <!--<label>用户名</label>-->
           <input type="email"
                  class="form-control"
-                 placeholder="Username"
+                 placeholder="管理员"
                  v-model="username">
         </div>
         <div class="form-group">
-          <label>密码</label>
+          <!--<label>密码</label>-->
           <input type="password"
                  class="form-control"
-                 placeholder="Password"
+                 placeholder="密码"
                  v-model="psd">
         </div>
         <button type="button"
-                class="btn btn-success"
+                class="btn btn-default btn-block"
                 @click="login(username, psd)">
           登录</button>
       </form>
-    </div>
+    <!--</div>-->
     <ErrMsgBox></ErrMsgBox>
     </div>
 </template>
@@ -54,17 +54,24 @@ export default {
         time: time
       }
       // 发送账户信息
-      axios.post('api/user', Qs.stringify(message)).then(response => {
+      axios.post('/api/login', Qs.stringify(message)).then(response => {
         if (response.data === 0) {
           Tools.showErrorBox(this.$store, '密码错误')
-        } else if (response.data === 1) {
-          localStorage.setItem('name', name)
-          console.log(localStorage.getItem('name'))
-          this.$router.push('/edit')
-          // alert('密码正确')
         } else if (response.data === 2) {
           Tools.showErrorBox(this.$store, '用户不存在')
+        } else {
+          // console.log(response.data)
+          let token = response.data.token
+          localStorage.setItem('token', token)
+          console.log('88' + localStorage.getItem('token'))
+          this.$router.replace('/admin/edit')
+          // let token = localStorage.getItem('token')
         }
+        // if (response.data === 1) {
+        //   localStorage.setItem('name', name)
+        //   console.log(localStorage.getItem('name'))
+        //   this.$router.push('/admin/edit')
+        // } 
       })
     }
   }
@@ -80,9 +87,12 @@ export default {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: url(../assets/img/loginbg.jpg) no-repeat;
+    /*background: url(../assets/img/loginbg.jpg) no-repeat;*/
+    background: #000;
     width: 100%;
     height: 100%;
+    text-align: center;
+    padding-top: 150px;
 }
 
 .connect {
@@ -100,7 +110,9 @@ export default {
     margin: 0 auto;
     padding: 10px 0 0 10px
 }
-
+.form-group{
+  margin-bottom: 20px;
+}
 img {
     height: 100px
 }

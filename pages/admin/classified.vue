@@ -12,7 +12,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in getClassifyList">
+        <tr v-for="item in classifyList">
           <td class="col-md-5">{{ item.name }}</td>
           <td class="col-md-7">
             <button type="button"
@@ -92,17 +92,21 @@
   </div>
 </template>
 <script>
-  import ErrMsgBox from '../components/err-msg-box.vue'
+  import ErrMsgBox from '../../components/err-msg-box.vue'
   import axios from '~/plugins/axios'
   import Qs from '~/plugins/qs'
-  import {mapGetters} from 'vuex'
   import Tools from '~/assets/js/tools'
 
   export default {
-    async fetch ({store, params}) {
+    async asyncData ({ params }) {
       let {data} = await axios.get('/api/classify')
-      store.dispatch('classify/initClassifyList', data)
+      console.log(data)
+      return { classifyList: data }
     },
+    //    async fetch ({store, params}) {
+    //      let {data} = await axios.get('/api/classify')
+    //      store.dispatch('classify/initClassifyList', data)
+    //    },
     data: function () {
       return {
         isShow1: true,
@@ -165,7 +169,12 @@
             Tools.showErrorBox(this.$store, response.data.msg)
           } else {
             this.isShow3 = false
-            this.$store.dispatch('classify/updateClassify', {name: this.name, oldName: this.updateItem.name})
+            let changeItem = {name: this.name, oldName: this.updateItem.name}
+            this.classifyList.map((item, index) => {
+              if (changeItem.oldName === item.name) {
+                this.classifyList[index] = changeItem
+              }
+            })
             this.name = ''
           }
         })
@@ -180,12 +189,13 @@
         if (this.name === '') {
           Tools.showErrorBox(this.$store, '分类名称不能为空')
         } else {
-          axios.post(`api/classify/${this.name}`).then(response => {
+          axios.post(`/api/classify/${this.name}`).then(response => {
             if (!response.data.status) {
               Tools.showErrorBox(this.$store, response.data.msg)
             } else {
               this.isShow2 = false
-              this.$store.dispatch('classify/addClassify', {name: this.name})
+              // this.$store.dispatch('classify/addClassify', {name: this.name})
+              this.classifyList.push({name: this.name})
               this.name = ''
             }
           })
@@ -209,12 +219,17 @@
        * @param item 要删除的分类
        */
       deleteClass (item) {
-        axios.delete(`api/classify/${item.name}`).then(response => {
+        axios.delete(`/api/classify/${item.name}`).then(response => {
           if (!response.data.status) {
             Tools.showErrorBox(this.$store, response.data.msg)
           } else {
             this.isDelete = false
-            this.$store.dispatch('classify/deleteClassify', this.deleteItem)
+            this.classifyList.map((item, index) => {
+              if (this.deleteItem.name === item.name) {
+                console.log(item, index)
+                this.classifyList.splice(index, 1)
+              }
+            })
           }
         })
       },
@@ -224,11 +239,6 @@
       cancelDelete () {
         this.isDelete = false
       }
-    },
-    computed: {
-      ...mapGetters('classify', [
-        'getClassifyList'
-      ])
     }
   }
 </script>

@@ -26,11 +26,13 @@ export default {
   components: {
     VmMarkdownMenu
   },
-  props: ['width', 'height'],
+  props: ['width', 'height', 'markdStr', 'htmlStr'],
   data: function () {
     return {
-      markdString: '',
-      htmlString: ''
+      // markdown语法str
+       markdString: this.markdStr,
+      // html语法str
+       htmlString: this.htmlStr
     }
   },
   computed: {
@@ -47,8 +49,11 @@ export default {
   },
   methods: {
     updateHtmlString (data) {
+      console.log('123' + data)
       this.markdString = data
     },
+    // 修改编辑器布局方式
+    // todo: 全屏布局有问题
     layoutControl () {
       let VmMarkdownLayout = document.querySelector('.vm-markdown-layout')
       let VmMarkdown = document.querySelector('.vm-markdown')
@@ -81,6 +86,7 @@ export default {
         })
       }
     },
+    // 把各种md语法解析为html语法
     parseHtml () {
       let style = {
         ul: `
@@ -150,12 +156,14 @@ export default {
         }
       }
     },
+    // 获取htmlStr 和 markdStr
     getHtml () {
       let html = document.querySelector('.vm-markdown-html')
-      this.$emit('gethtml', html.innerHTML)
+      this.$emit('gethtml', html.innerHTML, this.markdString)
     }
   },
   watch: {
+    // markdString属性变化的时候，解析为html语法并传给父组件
     markdString (value) {
       marked.setOptions({
         renderer: new marked.Renderer(),

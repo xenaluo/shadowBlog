@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import Classify from '../methods/classify-method'
+import confirmToken from '../middlewares/confirmToken'
 const router = Router()
 
 // 获取分类

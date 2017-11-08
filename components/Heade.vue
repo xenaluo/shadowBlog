@@ -4,8 +4,7 @@
     <!--<img v-bind:src="imgUrl" alt="logo" class="logo"/>-->
     <!--<p class="">{{ message }}</p>-->
     <!--</div>-->
-    <header class="main-header"
-            style="background-image: url(http://image.golaravel.com/5/c9/44e1c4e50d55159c65da6a41bc07e.jpg)">
+    <header class="main-header">
       <div class="container">
         <div class="row">
           <h1>shadowBlog</h1>
@@ -64,7 +63,7 @@
     <div class="content-wrap">
       <div class="content row">
         <div class="col-md-8">
-          <nuxt/>
+          <article-list></article-list>
         </div>
         <div class="col-md-4 sidebar">
           <div class="widget"><h4 class="title">社区</h4>
@@ -82,17 +81,20 @@
 </template>
 <script>
   import axios from '~/plugins/axios'
-
+  import ArticleList from './index/article-list.vue'
   export default {
     async asyncData () {
-      let {data} = await axios.get('api')
-      return {message: data.message}
+      let {data} = await axios.get('/api/articles')
+      console.log(data)
+      return { indexData: data }
     },
     data: function () {
       return {
-        imgUrl: '',
-        message: ''
+        indexData: {}
       }
+    },
+    components: {
+      ArticleList
     }
   }
 </script>
@@ -151,6 +153,17 @@
     border-bottom: 1px solid #ebebeb;
     margin-bottom: 21px;
     position: relative;
+
+  }
+
+  .main-header {
+    background-image: url("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3118269526,2951486423&fm=27&gp=0.jpg");
+    color: white;
+    height:20rem;
+  }
+
+  .container>.title {
+    margin-top: 2rem;
   }
 </style>
 

@@ -20,6 +20,9 @@ module.exports = {
   /*
   ** Add axios globally
   */
+  router: {
+    middleware: 'adminAuth'
+  },
   build: {
     vendor: ['axios', 'bootstrap', 'vue-quill-editor', 'qs'],
     /*
